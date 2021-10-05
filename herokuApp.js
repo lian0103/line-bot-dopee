@@ -32,10 +32,12 @@ function getRandom(min, max) {
 
 // event handler
 const linebotModel = require("./models/linebotModel");
+var nameCache = [];
 async function handleEvent(event) {
   console.log(event);
   const replyTemplate = [
-    "我是豆皮! 6個月大時成為太監",
+    "黃阿瑪有後宮... 我沒有",
+    "你是帥哥 還是美女??",
     "給我罐罐!!",
     "我要按摩",
     "給我小強!",
@@ -43,15 +45,19 @@ async function handleEvent(event) {
     "不用上班逆?",
   ];
   const profile = (await client.getProfile(event.source.userId)) || {};
-  const replyMsg = `Hi! ${profile.displayName} ${
-    replyTemplate[getRandom(0, replyTemplate.length - 1)]
-  }`;
+  let replyMsg = "";
+  if (!nameCache.includes(profile.displayName)) {
+    nameCache.push(profile.displayName);
+    replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監`;
+  }else{
+    replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
+  }
+ 
   const echo = { type: "text", text: replyMsg };
-
   if (event.type == "message" || event.message.type == "text") {
     let doc = new linebotModel({
       name: profile.displayName,
-      msg: event.message.text || "貼圖",
+      msg: event.message.text || event.message.stickerId || 'null',
     });
     await doc.save();
   }

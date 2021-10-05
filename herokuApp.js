@@ -51,7 +51,7 @@ async function handleEvent(event) {
   if (event.type == "message" || event.message.type == "text") {
     let doc = new linebotModel({
       name: profile.displayName,
-      msg: event.message.text,
+      msg: event.message.text || "貼圖",
     });
     await doc.save();
   }

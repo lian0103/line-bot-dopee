@@ -28,6 +28,10 @@ app.post('/callback', line.middleware(config), (req, res) => {
     });
 });
 
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
 // event handler
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {

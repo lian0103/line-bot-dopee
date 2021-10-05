@@ -39,7 +39,7 @@ async function handleEvent(event) {
     return Promise.resolve(null);
   }
   const replyTemplate = [
-    "我是豆皮! 6個月時大成為太監",
+    "我是豆皮! 6個月大時成為太監",
     "給我罐罐!!",
     "我要按摩",
     "給我小強!",

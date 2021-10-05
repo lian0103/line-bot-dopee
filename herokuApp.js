@@ -44,7 +44,7 @@ async function handleEvent(event) {
 //   let profile = await event.source.profile();
   console.log(event);
   var replyMsg = `Hi! ${replyTemplate[getRandom(0, replyTemplate.length-1)]}`;
-  const echo = { type: 'text', replyMsg };
+  const echo = { type: 'text', text : replyMsg };
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);

@@ -33,13 +33,9 @@ function getRandom(min, max) {
 // event handler
 const linebotModel = require("./models/linebotModel");
 async function handleEvent(event) {
-  // console.log(event);
-  if (event.type !== "message" || event.message.type !== "text") {
-    // ignore non-text-message event
-    return Promise.resolve(null);
-  }
+  console.log(event);
   const replyTemplate = [
-    "我是豆皮! 6個月大時成為太監",
+    "我是豆皮! 6個月大時...成為了太監",
     "給我罐罐!!",
     "我要按摩",
     "給我小強!",

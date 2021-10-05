@@ -41,9 +41,9 @@ async function handleEvent(event) {
 
   // create a echoing text message
   const replyTemplate = ["我是豆皮! 6個月時大成為太監", "給我罐罐!!", "我要按摩","給我小強!"];
-  let profile = await event.source.profile();
-//   console.log(profile);
-  var replyMsg = `Hi! ${profile.displayName} ${replyTemplate[getRandom(0, replyTemplate.length-1)]}`;
+//   let profile = await event.source.profile();
+  console.log(event);
+  var replyMsg = `Hi! ${profile?.displayName} ${replyTemplate[getRandom(0, replyTemplate.length-1)]}`;
   const echo = { type: 'text', replyMsg };
 
   // use reply API

@@ -35,7 +35,7 @@ const linebotModel = require("./models/linebotModel");
 async function handleEvent(event) {
   console.log(event);
   const replyTemplate = [
-    "我是豆皮! 6個月大時...成為了太監",
+    "我是豆皮! 6個月大時成為太監",
     "給我罐罐!!",
     "我要按摩",
     "給我小強!",
@@ -48,11 +48,13 @@ async function handleEvent(event) {
   }`;
   const echo = { type: "text", text: replyMsg };
 
-  let doc = new linebotModel({
-    name: profile.displayName,
-    msg: event.message.text,
-  });
-  await doc.save();
+  if (event.type == "message" || event.message.type == "text") {
+    let doc = new linebotModel({
+      name: profile.displayName,
+      msg: event.message.text,
+    });
+    await doc.save();
+  }
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);

@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "@line/bot-sdk": "^7.4.0",
     "dotenv": "^10.0.0",
     "linebot": "^1.6.1"
   },

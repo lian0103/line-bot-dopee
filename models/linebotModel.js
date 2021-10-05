@@ -6,7 +6,6 @@ const linebotRecord = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     msg: {
       type: String,

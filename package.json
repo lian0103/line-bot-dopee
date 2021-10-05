@@ -1,0 +1,25 @@
+{
+  "name": "line-chatbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "linebot": "^1.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lian0103/line-bot-dopee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lian0103/line-bot-dopee/issues"
+  },
+  "homepage": "https://github.com/lian0103/line-bot-dopee#readme"
+}

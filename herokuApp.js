@@ -42,7 +42,8 @@ async function handleEvent(event) {
     "我要按摩",
     "給我小強!",
     "系統還在優化中...請斗內",
-    "不用上班逆?",
+    "不用上班嗎? 在家耍廢嗎? ",
+    "你是不是上班都在看D-card西斯?",
   ];
   const profile = (await client.getProfile(event.source.userId)) || {};
   let replyMsg = "";

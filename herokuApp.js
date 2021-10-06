@@ -57,7 +57,8 @@ async function handleEvent(event) {
   console.log(event);
 
   if (event.message.text.includes("豆皮")) {
-    let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+    // let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+    let imgURL = "https://images.app.goo.gl/aGNTMXiKStZDqrjy8"
     let imageMsg = {
       type: "image",
       originalContentUrl: imgURL,

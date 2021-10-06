@@ -16,7 +16,6 @@ const client = new line.Client(config);
 const app = express();
 const port = process.env.PORT || 3005;
 
-app.use(express.static(path.join(__dirname, "public")));
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post("/callback", line.middleware(config), (req, res) => {
@@ -26,6 +25,25 @@ app.post("/callback", line.middleware(config), (req, res) => {
       console.error(err);
       res.status(500).end();
     });
+});
+
+app.get("/images/:imgName", (req, res) => {
+  var options = {
+    root: path.join(__dirname, "public/images"),
+    dotfiles: "deny",
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true,
+    },
+  };
+  var fileName = req.params.imgName;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent:", fileName);
+    }
+  });
 });
 
 function getRandom(min, max) {
@@ -45,7 +63,7 @@ async function handleEvent(event) {
       originalContentUrl: imgURL,
       previewImageUrl: imgURL,
     };
-    return client.replyMessage(event.replyToken,imageMsg);
+    return client.replyMessage(event.replyToken, imageMsg);
   }
 
   const replyTemplate = [

@@ -32,11 +32,13 @@ app.get("/images/:name", (req, res, next) => {
     root: path.join(__dirname, "public"),
     dotfiles: "deny",
     headers: {
+      "content-type":"jpeg",
       "x-timestamp": Date.now(),
       "x-sent": true,
     },
   };
-  var fileName = req.params.name;
+  var fileName = req.params.name + ".jpg";
+  console.log("fileName",fileName)
   res.sendFile(fileName, options, function (err) {
     if (err) {
       next(err);
@@ -57,8 +59,7 @@ async function handleEvent(event) {
   console.log(event);
 
   if (event.message.text.includes("豆皮")) {
-    // let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
-    let imgURL = "https://images.app.goo.gl/aGNTMXiKStZDqrjy8"
+    let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
     let imageMsg = {
       type: "image",
       originalContentUrl: imgURL,

@@ -82,9 +82,7 @@ async function handleEvent(event) {
   let replyMsg = "";
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
-    replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監!
-      輸入關鍵字「豆皮」會有驚喜美圖 ^.^
-    `;
+    replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監!  輸入關鍵字「豆皮」會有驚喜美圖 ^.^ `;
   } else {
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }

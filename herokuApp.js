@@ -1,8 +1,9 @@
 "use strict";
-
+const path = require("path");
 const line = require("@line/bot-sdk");
 const express = require("express");
 const mongoose = require("mongoose");
+const herokuURL = "https://line-bot-doope.herokuapp.com";
 const dbUri =
   "mongodb+srv://lien0103:k1319900103@chatroom.f2mhj.mongodb.net/chatroom?retryWrites=true&w=majority";
 // create LINE SDK config from env variables
@@ -15,6 +16,7 @@ const client = new line.Client(config);
 const app = express();
 const port = process.env.PORT || 3005;
 
+app.use(express.static(path.join(__dirname, "public")));
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 app.post("/callback", line.middleware(config), (req, res) => {
@@ -35,6 +37,17 @@ const linebotModel = require("./models/linebotModel");
 var nameCache = [];
 async function handleEvent(event) {
   console.log(event);
+
+  if (event.message.text.includes("豆皮")) {
+    let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+    let imageMsg = {
+      type: "image",
+      originalContentUrl: imgURL,
+      previewImageUrl: imgURL,
+    };
+    return client.replyMessage(event.replyToken,imageMsg);
+  }
+
   const replyTemplate = [
     "黃阿瑪有後宮... 我沒有",
     "你是帥哥 還是美女??",
@@ -50,15 +63,15 @@ async function handleEvent(event) {
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
     replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監`;
-  }else{
+  } else {
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
- 
+
   const echo = { type: "text", text: replyMsg };
   if (event.type == "message" || event.message.type == "text") {
     let doc = new linebotModel({
       name: profile.displayName,
-      msg: event.message.text || event.message.stickerId || 'null',
+      msg: event.message.text || event.message.stickerId || "null",
     });
     await doc.save();
   }

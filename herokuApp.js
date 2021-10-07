@@ -58,7 +58,7 @@ var nameCache = [];
 async function handleEvent(event) {
   console.log(event);
 
-  if (event.message.text.includes("豆皮")) {
+  if (event.message.text?.includes("豆皮")) {
     let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
     let imageMsg = {
       type: "image",

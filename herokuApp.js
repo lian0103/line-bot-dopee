@@ -49,18 +49,29 @@ app.get("/images/:name", (req, res, next) => {
 });
 
 app.get("/broadcastAll", (req, res, next) => {
-  console.log(client);
-  client.broadcast({
-    messages: [
-      {
-        type: "text",
-        text: "廣播測試~",
-      },
-      {
-        type: "text",
-        text: "呵~~~",
-      },
-    ],
+  let reqOption = {
+    uri: "https://api.line.me/v2/bot/message/broadcast",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.channelAccessToken}`,
+    },
+    body: {
+      messages: [
+        {
+          type: "text",
+          text: "廣播測試~",
+        },
+        {
+          type: "text",
+          text: "呵~~~",
+        },
+      ],
+    },
+  };
+  request.post(reqOption, (error, result, body) => {
+    console.log(result);
+    res.json(result);
   });
 });
 

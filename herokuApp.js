@@ -71,6 +71,7 @@ app.get("/broadcastAll", (req, res, next) => {
   };
   request.post(reqOption, (result) => {
     console.log(result);
+    res.json(result)
   });
 });
 

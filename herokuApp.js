@@ -49,31 +49,40 @@ app.get("/images/:name", (req, res, next) => {
 });
 
 app.get("/broadcastAll", (req, res, next) => {
-  let reqOption = {
-    url: "https://api.line.me/v2/bot/message/broadcast",
-    uri: "https://api.line.me/v2/bot/message/broadcast",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${config.channelAccessToken}`,
-    },
-    body: JSON.stringify({
-      messages: [
-        {
-          type: "text",
-          text: "廣播測試~",
-        },
-        {
-          type: "text",
-          text: "呵~~~",
-        },
-      ],
-    }),
-  };
-  request.post(reqOption, (error, result, body) => {
-    console.log(result);
-    res.json(result);
-  });
+
+  console.log(req.params)
+  console.log(req.params.msg)
+
+  if(req.params.msg && req.params.msg != ""){
+    let reqOption = {
+      url: "https://api.line.me/v2/bot/message/broadcast",
+      uri: "https://api.line.me/v2/bot/message/broadcast",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${config.channelAccessToken}`,
+      },
+      body: JSON.stringify({
+        messages: [
+          {
+            type: "text",
+            text: "廣播測試~",
+          },
+          {
+            type: "text",
+            text: "呵~~~",
+          },
+        ],
+      }),
+    };
+    request.post(reqOption, (error, result, body) => {
+      console.log(result);
+      res.json(result);
+    });
+  }else{
+    res.json({msg:"需要msg內容"})
+  }
+
 });
 
 function getRandom(min, max) {

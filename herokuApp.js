@@ -50,13 +50,14 @@ app.get("/images/:name", (req, res, next) => {
 
 app.get("/broadcastAll", (req, res, next) => {
   let reqOption = {
+    url: "https://api.line.me/v2/bot/message/broadcast",
     uri: "https://api.line.me/v2/bot/message/broadcast",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.channelAccessToken}`,
     },
-    body: {
+    body: JSON.stringify({
       messages: [
         {
           type: "text",
@@ -67,7 +68,7 @@ app.get("/broadcastAll", (req, res, next) => {
           text: "呵~~~",
         },
       ],
-    },
+    }),
   };
   request.post(reqOption, (error, result, body) => {
     console.log(result);

@@ -49,8 +49,7 @@ app.get("/images/:name", (req, res, next) => {
 });
 
 app.get("/broadcastAll", (req, res, next) => {
-  
-  if(req.query.msg && req.query.msg != ""){
+  if (req.query.msg && req.query.msg != "") {
     let reqOption = {
       url: "https://api.line.me/v2/bot/message/broadcast",
       uri: "https://api.line.me/v2/bot/message/broadcast",
@@ -63,11 +62,7 @@ app.get("/broadcastAll", (req, res, next) => {
         messages: [
           {
             type: "text",
-            text: "廣播測試~",
-          },
-          {
-            type: "text",
-            text: "呵~~~",
+            text: req.query.msg,
           },
         ],
       }),
@@ -76,10 +71,9 @@ app.get("/broadcastAll", (req, res, next) => {
       console.log(result);
       res.json(result);
     });
-  }else{
-    res.json({msg:"需要msg內容"})
+  } else {
+    res.json({ msg: "需要msg內容" });
   }
-
 });
 
 function getRandom(min, max) {

@@ -49,7 +49,7 @@ app.get("/images/:name", (req, res, next) => {
 });
 
 app.get("/broadcastAll", (req, res, next) => {
-
+  console.log(req)
   console.log(req.params)
   console.log(req.params.msg)
 

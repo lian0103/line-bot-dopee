@@ -19,8 +19,8 @@ const port = process.env.PORT || 3005;
 // register a webhook handler with middleware ; about the middleware, please refer to doc
 app.post("/callback", line.middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleMsgReply))
-    .then((result) => {
-      res.json(result);
+    .then((promiseArr) => {
+      Promise.all(promiseArr).then((result) => res.json(result));
     })
     .catch((err) => {
       console.error(err);
@@ -58,6 +58,7 @@ const linebotModel = require("./models/linebotModel");
 var nameCache = [];
 async function handleMsgReply(event) {
   console.log(event);
+  let promiseArr = [];
 
   const replyTemplate = [
     "我今年一歲",
@@ -76,11 +77,13 @@ async function handleMsgReply(event) {
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
     replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監! ^.^ `;
-    await client.replyMessage(event.replyToken, {
-      type: "image",
-      originalContentUrl: herokuURL + "/images/dopee0 ",
-      previewImageUrl: herokuURL + "/images/dopee0 ",
-    });
+    promiseArr.push(
+      client.replyMessage(event.replyToken, {
+        type: "image",
+        originalContentUrl: herokuURL + "/images/dopee0 ",
+        previewImageUrl: herokuURL + "/images/dopee0 ",
+      })
+    );
   } else {
     if (event.message.text?.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
@@ -89,7 +92,7 @@ async function handleMsgReply(event) {
         originalContentUrl: imgURL,
         previewImageUrl: imgURL,
       };
-      await client.replyMessage(event.replyToken, imageMsg);
+      promiseArr.push(client.replyMessage(event.replyToken, imageMsg));
     }
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
@@ -103,7 +106,8 @@ async function handleMsgReply(event) {
     await doc.save();
   }
 
-  return client.replyMessage(event.replyToken, echo);
+  promiseArr.push(client.replyMessage(event.replyToken, echo));
+  return promiseArr;
 }
 
 mongoose

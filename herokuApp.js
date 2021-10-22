@@ -16,11 +16,10 @@ const client = new line.Client(config);
 const app = express();
 const port = process.env.PORT || 3005;
 
-// register a webhook handler with middleware
-// about the middleware, please refer to doc
+// register a webhook handler with middleware ; about the middleware, please refer to doc
 app.post("/callback", line.middleware(config), (req, res) => {
-  Promise.all(req.body.events.map(handleEvent))
-    .then((result) => res.json(result))
+  Promise.all(req.body.events.map(handleMsgReply))
+    .then(() => {})
     .catch((err) => {
       console.error(err);
       res.status(500).end();
@@ -32,13 +31,13 @@ app.get("/images/:name", (req, res, next) => {
     root: path.join(__dirname, "public"),
     dotfiles: "deny",
     headers: {
-      "content-type":"jpeg",
+      "content-type": "jpeg",
       "x-timestamp": Date.now(),
       "x-sent": true,
     },
   };
   var fileName = req.params.name + ".jpg";
-  console.log("fileName",fileName)
+
   res.sendFile(fileName, options, function (err) {
     if (err) {
       next(err);
@@ -55,20 +54,11 @@ function getRandom(min, max) {
 // event handler
 const linebotModel = require("./models/linebotModel");
 var nameCache = [];
-async function handleEvent(event) {
+async function handleMsgReply(event) {
   console.log(event);
 
-  if (event.message.text?.includes("豆皮")) {
-    let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
-    let imageMsg = {
-      type: "image",
-      originalContentUrl: imgURL,
-      previewImageUrl: imgURL,
-    };
-    return client.replyMessage(event.replyToken, imageMsg);
-  }
-
   const replyTemplate = [
+    "我今年一歲",
     "黃阿瑪有後宮... 我沒有",
     "你是帥哥 還是美女??",
     "給我罐罐!!",
@@ -76,14 +66,29 @@ async function handleEvent(event) {
     "給我小強!",
     "系統還在優化中...請斗內",
     "不用上班嗎? 在家耍廢嗎? ",
-    "你是不是上班都在看D-card西斯?",
+    "累~~~",
+    "思考貓生...",
   ];
   const profile = (await client.getProfile(event.source.userId)) || {};
   let replyMsg = "";
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
-    replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監!  輸入關鍵字「豆皮」會有驚喜美圖 ^.^ `;
+    replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監! ^.^ `;
+    client.replyMessage(event.replyToken, {
+      type: "image",
+      originalContentUrl: herokuURL + "/images/dopee0 ",
+      previewImageUrl: herokuURL + "/images/dopee0 ",
+    });
   } else {
+    if (event.message.text?.includes("豆皮")) {
+      let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+      let imageMsg = {
+        type: "image",
+        originalContentUrl: imgURL,
+        previewImageUrl: imgURL,
+      };
+      client.replyMessage(event.replyToken, imageMsg);
+    }
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
 
@@ -96,8 +101,7 @@ async function handleEvent(event) {
     await doc.save();
   }
 
-  // use reply API
-  return client.replyMessage(event.replyToken, echo);
+  client.replyMessage(event.replyToken, echo);
 }
 
 mongoose

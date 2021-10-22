@@ -19,12 +19,7 @@ const port = process.env.PORT || 3005;
 // register a webhook handler with middleware ; about the middleware, please refer to doc
 app.post("/callback", line.middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleMsgReply))
-    .then((promiseArr) => {
-      promiseArr.forEach(async (pItem) => {
-        let result = await pItem;
-        res.json(result);
-      });
-    })
+    .then((result) => res.json(result))
     .catch((err) => {
       console.error(err);
       res.status(500).end();
@@ -61,7 +56,6 @@ const linebotModel = require("./models/linebotModel");
 var nameCache = [];
 async function handleMsgReply(event) {
   console.log(event);
-  let promiseArr = [];
 
   const replyTemplate = [
     "我今年一歲",
@@ -77,30 +71,27 @@ async function handleMsgReply(event) {
   ];
   const profile = (await client.getProfile(event.source.userId)) || {};
   let replyMsg = "";
+  let replyImg = null;
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
     replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監! ^.^ `;
-    promiseArr.push(
-      client.replyMessage(event.replyToken, {
-        type: "image",
-        originalContentUrl: herokuURL + "/images/dopee0 ",
-        previewImageUrl: herokuURL + "/images/dopee0 ",
-      })
-    );
+    replyImg = {
+      type: "image",
+      originalContentUrl: herokuURL + "/images/dopee0 ",
+      previewImageUrl: herokuURL + "/images/dopee0 ",
+    };
   } else {
     if (event.message.text?.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
-      let imageMsg = {
+      replyImg = {
         type: "image",
         originalContentUrl: imgURL,
         previewImageUrl: imgURL,
       };
-      promiseArr.push(client.replyMessage(event.replyToken, imageMsg));
     }
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
 
-  const echo = { type: "text", text: replyMsg };
   if (event.type == "message" || event.message.type == "text") {
     let doc = new linebotModel({
       name: profile.displayName,
@@ -109,8 +100,11 @@ async function handleMsgReply(event) {
     await doc.save();
   }
 
-  promiseArr.push(client.replyMessage(event.replyToken, echo));
-  return promiseArr;
+  const echo = replyImg
+    ? [{ type: "text", text: replyMsg }, replyImg]
+    : { type: "text", text: replyMsg };
+
+  return client.replyMessage(event.replyToken, echo);
 }
 
 mongoose

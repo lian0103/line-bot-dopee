@@ -19,7 +19,9 @@ const port = process.env.PORT || 3005;
 // register a webhook handler with middleware ; about the middleware, please refer to doc
 app.post("/callback", line.middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleMsgReply))
-    .then(() => {})
+    .then((result) => {
+      res.json(result);
+    })
     .catch((err) => {
       console.error(err);
       res.status(500).end();
@@ -74,7 +76,7 @@ async function handleMsgReply(event) {
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
     replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監! ^.^ `;
-    client.replyMessage(event.replyToken, {
+    await client.replyMessage(event.replyToken, {
       type: "image",
       originalContentUrl: herokuURL + "/images/dopee0 ",
       previewImageUrl: herokuURL + "/images/dopee0 ",
@@ -87,7 +89,7 @@ async function handleMsgReply(event) {
         originalContentUrl: imgURL,
         previewImageUrl: imgURL,
       };
-      client.replyMessage(event.replyToken, imageMsg);
+      await client.replyMessage(event.replyToken, imageMsg);
     }
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
@@ -101,7 +103,7 @@ async function handleMsgReply(event) {
     await doc.save();
   }
 
-  client.replyMessage(event.replyToken, echo);
+  return client.replyMessage(event.replyToken, echo);
 }
 
 mongoose

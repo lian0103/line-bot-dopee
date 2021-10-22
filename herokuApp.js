@@ -49,11 +49,8 @@ app.get("/images/:name", (req, res, next) => {
 });
 
 app.get("/broadcastAll", (req, res, next) => {
-  console.log(req)
-  console.log(req.params)
-  console.log(req.params.msg)
-
-  if(req.params.msg && req.params.msg != ""){
+  
+  if(req.query.msg && req.query.msg != ""){
     let reqOption = {
       url: "https://api.line.me/v2/bot/message/broadcast",
       uri: "https://api.line.me/v2/bot/message/broadcast",

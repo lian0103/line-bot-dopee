@@ -50,7 +50,7 @@ app.get("/images/:name", (req, res, next) => {
 
 app.get("/broadcastAll", (req, res, next) => {
   let reqOption = {
-    path: "https://api.line.me/v2/bot/message/broadcast",
+    url: "https://api.line.me/v2/bot/message/broadcast",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -69,7 +69,7 @@ app.get("/broadcastAll", (req, res, next) => {
       },
     },
   };
-  request.post(reqOption, (result) => {
+  request.post(reqOption, (error, result, body) => {
     console.log(result);
     res.json(result)
   });

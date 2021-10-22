@@ -43,7 +43,7 @@ app.get("/images/:name", (req, res, next) => {
     if (err) {
       next(err);
     } else {
-      console.log("Sent:", fileName);
+      // console.log("Sent:", fileName);
     }
   });
 });
@@ -68,7 +68,7 @@ app.get("/broadcastAll", (req, res, next) => {
       }),
     };
     request.post(reqOption, (error, result, body) => {
-      console.log(result);
+      // console.log(result);
       res.json(result);
     });
   } else {
@@ -84,7 +84,7 @@ function getRandom(min, max) {
 const linebotModel = require("./models/linebotModel");
 var nameCache = [];
 async function handleMsgReply(event) {
-  console.log(event);
+  // console.log(event);
 
   const replyTemplate = [
     "我今年一歲",

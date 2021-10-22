@@ -3,6 +3,7 @@ const path = require("path");
 const line = require("@line/bot-sdk");
 const express = require("express");
 const mongoose = require("mongoose");
+const request = require("request");
 const herokuURL = "https://line-bot-doope.herokuapp.com";
 const dbUri =
   "mongodb+srv://lien0103:k1319900103@chatroom.f2mhj.mongodb.net/chatroom?retryWrites=true&w=majority";
@@ -44,6 +45,32 @@ app.get("/images/:name", (req, res, next) => {
     } else {
       console.log("Sent:", fileName);
     }
+  });
+});
+
+app.get("/broadcastAll", (req, res, next) => {
+  let reqOption = {
+    path: "https://api.line.me/v2/bot/message/broadcast",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${config.channelAccessToken}`,
+      body: {
+        messages: [
+          {
+            type: "text",
+            text: "廣播測試~",
+          },
+          {
+            type: "text",
+            text: "呵~~~",
+          },
+        ],
+      },
+    },
+  };
+  request.post(reqOption, (result) => {
+    console.log(result);
   });
 });
 

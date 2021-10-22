@@ -55,23 +55,23 @@ app.get("/broadcastAll", (req, res, next) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.channelAccessToken}`,
-      body: {
-        messages: [
-          {
-            type: "text",
-            text: "廣播測試~",
-          },
-          {
-            type: "text",
-            text: "呵~~~",
-          },
-        ],
-      },
+    },
+    body: {
+      messages: [
+        {
+          type: "text",
+          text: "廣播測試~",
+        },
+        {
+          type: "text",
+          text: "呵~~~",
+        },
+      ],
     },
   };
   request.post(reqOption, (error, result, body) => {
     console.log(result);
-    res.json(result)
+    res.json(result);
   });
 });
 

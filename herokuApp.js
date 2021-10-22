@@ -20,7 +20,10 @@ const port = process.env.PORT || 3005;
 app.post("/callback", line.middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleMsgReply))
     .then((promiseArr) => {
-      Promise.all(promiseArr).then((result) => res.json(result));
+      promiseArr.forEach(async (pItem) => {
+        let result = await pItem;
+        res.json(result);
+      });
     })
     .catch((err) => {
       console.error(err);

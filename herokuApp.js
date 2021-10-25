@@ -1,5 +1,5 @@
 "use strict";
-
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const dbUri =
@@ -11,10 +11,9 @@ app.use(require("./routes/imgRoute"));
 app.use(require("./routes/lineBotCallback"));
 app.use(require("./routes/msgRoute"));
 app.get("*", (req, res) => {
-  res.send(`
-    demo call GET  https://line-bot-doope.herokuapp.com/broadcastAll?msg=line可以推播~~
-    demo call GET  https://line-bot-doope.herokuapp.com/queryTodayMsgRecord
-  `);
+  res.sendFile(path.join(process.cwd(), "public/demo.html"), (err) => {
+    console.log(err);
+  });
 });
 
 mongoose

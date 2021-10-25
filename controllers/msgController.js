@@ -4,6 +4,7 @@ const linebotModel = require("../models/linebotModel");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
+var nameCache = [];
 
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;

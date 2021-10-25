@@ -10,7 +10,6 @@ function getRandom(min, max) {
 }
 
 // event handler
-var nameCache = [];
 async function handleMsgReply(event) {
   // console.log(event);
 

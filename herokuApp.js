@@ -12,6 +12,7 @@ const dbUri =
 
 const app = express();
 const port = process.env.PORT || 3005;
+var nameCache = [];
 
 app.use(imgRoute);
 app.use(lineServiceRoute);

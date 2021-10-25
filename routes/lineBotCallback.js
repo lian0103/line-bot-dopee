@@ -5,7 +5,7 @@ const msgController = require('../controllers/msgController.js');
 
 const router = Router();
 
-router.get("/callback", line.middleware(config),  msgController.handleLineCallback);
+router.post("/callback", line.middleware(config),  msgController.handleLineCallback);
 
 
 module.exports = router;

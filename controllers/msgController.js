@@ -38,7 +38,7 @@ async function handleMsgReply(event) {
       previewImageUrl: herokuURL + "/images/dopee0 ",
     };
   } else {
-    if (event.message.text.includes("豆皮")) {
+    if (event.message.text?.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {
         type: "image",

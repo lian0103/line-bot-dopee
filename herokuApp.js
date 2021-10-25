@@ -10,11 +10,7 @@ const port = process.env.PORT || 3005;
 app.use(require("./routes/imgRoute"));
 app.use(require("./routes/lineBotCallback"));
 app.use(require("./routes/msgRoute"));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "public/demo.html"), (err) => {
-    console.log(err);
-  });
-});
+app.use(require("./routes/defaultRoute"));
 
 mongoose
   .connect(dbUri, {

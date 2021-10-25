@@ -8,7 +8,7 @@ const msgRoute = require("./routes/msgRoute");
 const lineServiceRoute = require("./routes/lineBotCallback");
 
 const dbUri =
-  "mongodb+srv://lien0103:k1319900103@chatroom.f2mhj.mongodb.net/chatroom?retryWrites=true&w=majority";
+  "mongodb+srv://lien0103:k1319900103@chatroom.f2mhj.mongodb.net/line?retryWrites=true&w=majority";
 
 const app = express();
 const port = process.env.PORT || 3005;

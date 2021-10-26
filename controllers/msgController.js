@@ -6,6 +6,8 @@ const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
 
 const replyTemplate = [
+  "唉呦~",
+  "我最近開始玩魔力寶貝歸來~~",
   "我今年一歲",
   "黃阿瑪有後宮... 我沒有",
   "你是帥哥 還是美女??",

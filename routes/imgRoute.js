@@ -5,7 +5,7 @@ const router = Router();
 router.get("/images/:name", (req, res, next) => {
   console.log("process.cwd()",process.cwd())
   var options = {
-    root: path.join(process.cwd(), "public"),
+    root: path.join(process.cwd(), "public","imgs"),
     dotfiles: "deny",
     headers: {
       "content-type": "jpeg",

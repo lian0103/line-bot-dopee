@@ -49,11 +49,14 @@ async function handleMsgReply(event) {
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
 
-  if (event.type == "message" || event.message.type == "text") {
+  if (
+    event.type == "message" ||
+    (event.message.type == "text" && !event.message.stickerId)
+  ) {
     // console.log(event.message)
     let doc = new linebotModel({
       name: profile.displayName,
-      msg: event.message.text || (event.message.stickerId ? ("貼圖 " + event.message.stickerId) : false) || "null",
+      msg: event.message.text,
     });
     await doc.save();
   }

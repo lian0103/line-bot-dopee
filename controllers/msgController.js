@@ -38,7 +38,7 @@ async function handleMsgReply(event) {
       previewImageUrl: herokuURL + "/images/dopee0 ",
     };
   } else {
-    if (event.message.text?.includes("豆皮")) {
+    if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {
         type: "image",
@@ -52,7 +52,7 @@ async function handleMsgReply(event) {
   if (event.type == "message" || event.message.type == "text") {
     let doc = new linebotModel({
       name: profile.displayName,
-      msg: event.message.text || event.message.stickerId || "null",
+      msg: event.message.text || event.message.stickerId ? "貼圖" : "null",
     });
     await doc.save();
   }
@@ -74,7 +74,12 @@ module.exports.getTodayMsg = async (req, res) => {
 };
 
 module.exports.broadcastAll = async (req, res) => {
-  if (req.query.msg && req.query.msg != "") {
+  let { psw, msg } = req.params;
+  if (psw != "28") {
+    return res.json({ status: 302, msg: "密碼錯誤^^" });
+  }
+
+  if (msg && msg != "") {
     let reqOption = {
       url: "https://api.line.me/v2/bot/message/broadcast",
       uri: "https://api.line.me/v2/bot/message/broadcast",
@@ -97,7 +102,7 @@ module.exports.broadcastAll = async (req, res) => {
       res.json(result);
     });
   } else {
-    res.json({ msg: "需要msg內容" });
+    res.json({ status: 301, msg: "error!" });
   }
 };
 

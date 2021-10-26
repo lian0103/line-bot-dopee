@@ -6,7 +6,6 @@ const router = Router();
 
 router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
 
-router.get("/broadcastAll",msgController.broadcastAll)
-
+router.post("/broadcastAll/:psw/:msg",msgController.broadcastAll)
 
 module.exports = router;

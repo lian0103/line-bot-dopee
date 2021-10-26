@@ -50,6 +50,7 @@ async function handleMsgReply(event) {
   }
 
   if (event.type == "message" || event.message.type == "text") {
+    console.log(event.message)
     let doc = new linebotModel({
       name: profile.displayName,
       msg: event.message.text || event.message.stickerId ? "貼圖" : "null",

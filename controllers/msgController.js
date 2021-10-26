@@ -79,6 +79,7 @@ module.exports.getTodayMsg = async (req, res) => {
 
 module.exports.broadcastAll = async (req, res) => {
   let { psw, msg } = req.params;
+  // console.log(psw,msg)
   if (psw != "28") {
     return res.json({ status: 302, msg: "密碼錯誤^^" });
   }
@@ -96,7 +97,7 @@ module.exports.broadcastAll = async (req, res) => {
         messages: [
           {
             type: "text",
-            text: req.query.msg,
+            text: msg,
           },
         ],
       }),

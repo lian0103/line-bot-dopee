@@ -18,7 +18,7 @@ const replyTemplate = [
   "思考貓生...",
 ];
 
-const dirtyWords=["fuck","王八","白癡","幹你"]
+const dirtyWords = ["fuck", "王八", "白癡", "幹你"];
 
 var nameCache = [];
 
@@ -28,12 +28,23 @@ function getRandom(min, max) {
 
 // event handler
 async function handleMsgReply(event) {
-  console.log(event);
-
-
-  const profile = (await client.getProfile(event.source.userId)) || {};
   let replyMsg = "";
   let replyImg = null;
+
+  if (
+    event.message.text &&
+    dirtyWords.filter((dWord) => event.message.text.includes(dWord)).length > 0
+  ) {
+    replyMsg += "請勿說髒話字^^";
+
+    return client.replyMessage(event.replyToken, {
+      type: "text",
+      text: replyMsg,
+    });
+  }
+
+  const profile = (await client.getProfile(event.source.userId)) || {};
+
   if (!nameCache.includes(profile.displayName)) {
     nameCache.push(profile.displayName);
     replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監! ^.^ `;
@@ -51,15 +62,12 @@ async function handleMsgReply(event) {
         previewImageUrl: imgURL,
       };
     }
-
-    if(event.message.text && dirtyWords.filter(dWord=>event.message.text.includes(dWord)).length > 0){
-      replyMsg += "請勿說髒話字^^"
-    }else{
-      replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
-    }
-  
+    replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
-
+  console.log("~~~~~~~~~~~~~~~~~~~~~~");
+  console.log(event.type);
+  console.log(event.message);
+  console.log("~~~~~~~~~~~~~~~~~~~~~~");
   if (
     (event.type == "message" || event.message.type == "text") &&
     !event.message.stickerId

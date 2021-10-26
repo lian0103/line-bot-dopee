@@ -4,6 +4,22 @@ const linebotModel = require("../models/linebotModel");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
+
+const replyTemplate = [
+  "我今年一歲",
+  "黃阿瑪有後宮... 我沒有",
+  "你是帥哥 還是美女??",
+  "給我罐罐!!",
+  "我要按摩",
+  "給我小強!",
+  "系統還在優化中...請斗內",
+  "不用上班嗎? 在家耍廢嗎? ",
+  "累~~~",
+  "思考貓生...",
+];
+
+const dirtyWords=["fuck","王八","白癡","幹你"]
+
 var nameCache = [];
 
 function getRandom(min, max) {
@@ -12,20 +28,9 @@ function getRandom(min, max) {
 
 // event handler
 async function handleMsgReply(event) {
-  // console.log(event);
+  console.log(event);
 
-  const replyTemplate = [
-    "我今年一歲",
-    "黃阿瑪有後宮... 我沒有",
-    "你是帥哥 還是美女??",
-    "給我罐罐!!",
-    "我要按摩",
-    "給我小強!",
-    "系統還在優化中...請斗內",
-    "不用上班嗎? 在家耍廢嗎? ",
-    "累~~~",
-    "思考貓生...",
-  ];
+
   const profile = (await client.getProfile(event.source.userId)) || {};
   let replyMsg = "";
   let replyImg = null;
@@ -46,7 +51,13 @@ async function handleMsgReply(event) {
         previewImageUrl: imgURL,
       };
     }
-    replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
+
+    if(event.message.text && dirtyWords.filter(dWord=>event.message.text.includes(dWord)).length > 0){
+      replyMsg += "請勿說髒話字^^"
+    }else{
+      replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
+    }
+  
   }
 
   if (
@@ -87,7 +98,6 @@ module.exports.broadcastAll = async (req, res) => {
   if (msg && msg != "") {
     let reqOption = {
       url: "https://api.line.me/v2/bot/message/broadcast",
-      uri: "https://api.line.me/v2/bot/message/broadcast",
       method: "POST",
       headers: {
         "Content-Type": "application/json",

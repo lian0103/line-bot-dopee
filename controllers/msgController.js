@@ -18,7 +18,7 @@ const replyTemplate = [
   "思考貓生...",
 ];
 
-const dirtyWords = ["fuck", "王八", "白癡", "幹你"];
+const dirtyWords = ["fuck", "王八", "白癡", "幹"];
 
 var nameCache = [];
 
@@ -33,7 +33,7 @@ async function handleMsgReply(event) {
 
   if (
     event.message.text &&
-    dirtyWords.filter((dWord) => event.message.text.includes(dWord)).length > 0
+    dirtyWords.filter((dWord) => event.message.text.includes(dWord.toLocaleLowerCase())).length > 0
   ) {
     replyMsg += "請勿說髒話字^^";
 
@@ -64,15 +64,11 @@ async function handleMsgReply(event) {
     }
     replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
   }
-  console.log("~~~~~~~~~~~~~~~~~~~~~~");
-  console.log(event.type);
-  console.log(event.message);
-  console.log("~~~~~~~~~~~~~~~~~~~~~~");
-  if (
-    (event.type == "message" || event.message.type == "text") &&
-    !event.message.stickerId
-  ) {
-    // console.log(event.message)
+  // console.log("~~~~~~~~~~~~~~~~~~~~~~");
+  // console.log(event.type);
+  // console.log(event.message);
+  // console.log("~~~~~~~~~~~~~~~~~~~~~~");
+  if (event.message.text) {
     let doc = new linebotModel({
       name: profile.displayName,
       msg: event.message.text,

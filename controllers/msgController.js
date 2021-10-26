@@ -50,8 +50,8 @@ async function handleMsgReply(event) {
   }
 
   if (
-    event.type == "message" ||
-    (event.message.type == "text" && !event.message.stickerId)
+    (event.type == "message" || event.message.type == "text") &&
+    !event.message.stickerId
   ) {
     // console.log(event.message)
     let doc = new linebotModel({

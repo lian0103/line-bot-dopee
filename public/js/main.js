@@ -8,8 +8,8 @@ $(document).ready(function () {
       return false;
     } else {
       $("#sendError").text("");
-      let msg = $("#msgInput").val();
-      let psw = $("#msgInputPsw").val();
+      let msg = encodeURIComponent($("#msgInput").val());
+      let psw = encodeURIComponent($("#msgInputPsw").val());
 
       $.ajax({
         url: domain + `/broadcastAll/${psw}/${msg}`,
@@ -18,8 +18,8 @@ $(document).ready(function () {
         success: function (res) {
           console.log(res);
           $("#msgInput").val("");
-          $("#msgInputPsw").val("")
-          if(res.status != 200){
+          $("#msgInputPsw").val("");
+          if (res.status != 200) {
             $("#sendError").text(res.msg);
           }
         },

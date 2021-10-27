@@ -23,6 +23,7 @@ const replyTemplate = [
 const dirtyWords = ["fuck", "王八", "白癡", "幹"];
 
 var nameCache = [];
+var recordCache = {}
 
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -46,15 +47,18 @@ async function handleMsgReply(event) {
   }
 
   const profile = (await client.getProfile(event.source.userId)) || {};
-
-  if (!nameCache.includes(profile.displayName)) {
-    nameCache.push(profile.displayName);
-    replyMsg += `Hi! ${profile.displayName} 我是豆皮! 6個月大時成為太監! ^.^ `;
+  const name = profile.displayName;
+  if (!nameCache.includes(name)) {
+    nameCache.push(name);
+    replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
     replyImg = {
       type: "image",
       originalContentUrl: herokuURL + "/images/dopee0 ",
       previewImageUrl: herokuURL + "/images/dopee0 ",
     };
+
+    recordCache[name] = [...replyTemplate];
+
   } else {
     if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
@@ -64,7 +68,15 @@ async function handleMsgReply(event) {
         previewImageUrl: imgURL,
       };
     }
-    replyMsg += `${replyTemplate[getRandom(0, replyTemplate.length - 1)]}`;
+    if(recordCache[name].length > 0){
+      let rMsgIndex = getRandom(0, recordCache[name].length - 1);
+      replyMsg += `${recordCache[name][rMsgIndex]}`;
+      recordCache[name].splice(rMsgIndex,1);
+      console.log(recordCache[name])
+    }else{
+      replyMsg += "今日已無話可說^.^"
+    }
+    
   }
   // console.log("~~~~~~~~~~~~~~~~~~~~~~");
   // console.log(event.type);

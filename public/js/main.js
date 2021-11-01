@@ -7,6 +7,7 @@ $(document).ready(function () {
     imgFile = $("#fileInput").prop("files")[0];
 
     if (imgFile) {
+      $('#imgboxNextSvg').hide();
       $("#imgbox").empty();
       let src = URL.createObjectURL(imgFile);
       let imgTemp = `<p class="text-gray-700">名稱:${imgFile.name}</p> <img class='' src=${src} />`;
@@ -67,6 +68,7 @@ $(document).ready(function () {
         $("#msgInputPsw").val("");
         imgFile = null;
         $("#imgbox").empty();
+        $('#imgboxNextSvg').show();
         if (res.status != 200) {
           $("#sendError").text(res.msg);
         }

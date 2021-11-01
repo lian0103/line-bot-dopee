@@ -8,4 +8,6 @@ router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
 
 router.post("/broadcastAll/:psw/:msg",msgController.broadcastAll)
 
+router.post("/broadcastAll/:psw/:msg/:img",msgController.broadcastAll)
+
 module.exports = router;

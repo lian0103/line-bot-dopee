@@ -9,6 +9,7 @@
     "express": "^4.17.1",
     "linebot": "^1.6.1",
     "mongoose": "^6.0.9",
+    "multer": "^1.4.3",
     "request": "^2.88.2"
   },
   "devDependencies": {},

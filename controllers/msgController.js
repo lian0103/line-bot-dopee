@@ -23,7 +23,7 @@ const replyTemplate = [
 const dirtyWords = ["fuck", "王八", "白癡", "幹"];
 
 var nameCache = [];
-var recordCache = {}
+var recordCache = {};
 
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -36,7 +36,9 @@ async function handleMsgReply(event) {
 
   if (
     event.message.text &&
-    dirtyWords.filter((dWord) => event.message.text.includes(dWord.toLocaleLowerCase())).length > 0
+    dirtyWords.filter((dWord) =>
+      event.message.text.includes(dWord.toLocaleLowerCase())
+    ).length > 0
   ) {
     replyMsg += "請勿說髒話字^^";
 
@@ -58,7 +60,6 @@ async function handleMsgReply(event) {
     };
 
     recordCache[name] = [...replyTemplate];
-
   } else {
     if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
@@ -68,15 +69,14 @@ async function handleMsgReply(event) {
         previewImageUrl: imgURL,
       };
     }
-    if(recordCache[name].length > 0){
+    if (recordCache[name].length > 0) {
       let rMsgIndex = getRandom(0, recordCache[name].length - 1);
       replyMsg += `${recordCache[name][rMsgIndex]}`;
-      recordCache[name].splice(rMsgIndex,1);
-      console.log(recordCache[name])
-    }else{
-      replyMsg += "今日已無話可說^.^"
+      recordCache[name].splice(rMsgIndex, 1);
+      console.log(recordCache[name]);
+    } else {
+      replyMsg += "今日已無話可說^.^";
     }
-    
   }
   // console.log("~~~~~~~~~~~~~~~~~~~~~~");
   // console.log(event.type);
@@ -107,13 +107,36 @@ module.exports.getTodayMsg = async (req, res) => {
 };
 
 module.exports.broadcastAll = async (req, res) => {
-  let { psw, msg } = req.params;
-  // console.log(psw,msg)
+  let { psw, msg, img } = req.params;
+  console.log(psw, msg, img);
   if (psw != "28") {
     return res.json({ status: 302, msg: "密碼錯誤^^" });
   }
 
   if (msg && msg != "") {
+    let body = img
+      ? {
+          messages: [
+            {
+              type: "text",
+              text: msg,
+            },
+            {
+              type: "image",
+              originalContentUrl: herokuURL + `/images/upload/${img}`,
+              previewImageUrl: herokuURL + `/images/upload/${img}`,
+            },
+          ],
+        }
+      : {
+          messages: [
+            {
+              type: "text",
+              text: msg,
+            },
+          ],
+        };
+
     let reqOption = {
       url: "https://api.line.me/v2/bot/message/broadcast",
       method: "POST",
@@ -121,14 +144,7 @@ module.exports.broadcastAll = async (req, res) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${config.channelAccessToken}`,
       },
-      body: JSON.stringify({
-        messages: [
-          {
-            type: "text",
-            text: msg,
-          },
-        ],
-      }),
+      body: JSON.stringify(body),
     };
     request.post(reqOption, (error, result, body) => {
       // console.log(result);

@@ -2,7 +2,15 @@ const { Router } = require("express");
 const path = require("path");
 const router = Router();
 const multer = require("multer");
-const upload = multer({ dest: path.join(__dirname, "public","uploads") });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public//uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({storage:storage});
 
 router.post("/images/upload",   upload.single('imgFile'), function (req, res, next) {
   console.log("in~~ /uploadImg");
@@ -11,7 +19,7 @@ router.post("/images/upload",   upload.single('imgFile'), function (req, res, ne
 });
 
 router.get("/images/upload/:name", (req, res, next) => {
-  // console.log("process.cwd()", process.cwd());
+
   var options = {
     root: path.join(process.cwd(), "public", "uploads"),
     dotfiles: "deny",
@@ -22,6 +30,7 @@ router.get("/images/upload/:name", (req, res, next) => {
     },
   };
   var fileName = req.params.name;
+  console.log("fileName", fileName);
 
   res.sendFile(fileName, options, function (err) {
     if (err) {

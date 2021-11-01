@@ -2,7 +2,7 @@ const { Router } = require("express");
 const path = require("path");
 const router = Router();
 const multer = require("multer");
-const upload = multer({ dest: '../public/uploads/' });
+const upload = multer({ dest: express.static(path.join(__dirname, "public","uploads")) });
 
 router.post("/images/upload",   upload.single('imgFile'), function (req, res, next) {
   console.log("in~~ /uploadImg");

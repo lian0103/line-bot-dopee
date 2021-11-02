@@ -26,21 +26,21 @@ $(document).ready(function () {
       return false;
     }
 
-    let imgUploadInfo = null;
+    let uploadFilename = null;
     if (imgFile) {
       await new Promise((resolve, reject) => {
         let formData = new FormData();
-        formData.append("imgFile", imgFile);
+        formData.append("file", imgFile);
 
         $.ajax({
-          url: domain + `/images/upload`,
+          url: domain + `/upload`,
           data: formData,
           processData: false,
           contentType: false,
           type: "POST",
           success: function (data) {
             console.log(data);
-            imgUploadInfo = data.imgUploadInfo;
+            uploadFilename = data.filename;
             resolve(true);
           },
           error: function (err) {
@@ -54,8 +54,8 @@ $(document).ready(function () {
     let msg = encodeURIComponent($("#msgInput").val());
     let psw = encodeURIComponent($("#msgInputPsw").val());
 
-    let url = imgUploadInfo
-      ? domain + `/broadcastAll/${psw}/${msg}/${imgUploadInfo.filename}`
+    let url = uploadFilename
+      ? domain + `/broadcastAll/${psw}/${msg}/${uploadFilename}`
       : domain + `/broadcastAll/${psw}/${msg}`;
 
     $.ajax({

@@ -123,8 +123,8 @@ module.exports.broadcastAll = async (req, res) => {
             },
             {
               type: "image",
-              originalContentUrl: herokuURL + `/images/upload/${img}`,
-              previewImageUrl: herokuURL + `/images/upload/${img}`,
+              originalContentUrl: herokuURL + `/upload/${img}`,
+              previewImageUrl:  herokuURL + `/upload/${img}`,
             },
           ],
         }

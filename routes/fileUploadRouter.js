@@ -38,32 +38,18 @@ router.get("/upload/:filename", (req, res) => {
     bucketName: "filesBucket",
   });
 
+  res.setHeader("Content-type", "image/png");
   gridfsbucket
     .openDownloadStreamByName(filename)
-    .pipe(fs.createWriteStream("./public/uploads/" + filename))
+    .pipe(res)
     .on("error", function (error) {
-    //   console.log("error" + error);
+      //   console.log("error" + error);
       res.status(200).json({
         msg: error.message,
       });
     })
     .on("finish", function () {
-      var options = {
-        root: path.join(process.cwd(), "public", "uploads"),
-        dotfiles: "deny",
-        headers: {
-          "content-type": "jpeg",
-          "x-timestamp": Date.now(),
-          "x-sent": true,
-        },
-      };
-      res.sendFile(filename, options, function (err) {
-        if (err) {
-          next(err);
-        } else {
-          // console.log("Sent:", fileName);
-        }
-      });
+      console.log("in finish");
     });
 });
 

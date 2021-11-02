@@ -29,7 +29,7 @@ router.post("/upload", (req, res) => {
     });
 });
 
-router.get("/upload/:filename", (req, res) => {
+router.get("/upload/:filename", async (req, res) => {
   const filename = req.params.filename;
   console.log("get download " + filename);
 
@@ -38,7 +38,7 @@ router.get("/upload/:filename", (req, res) => {
     bucketName: "filesBucket",
   });
 
-  res.setHeader("Content-type", "image/png");
+  await res.setHeader("Content-type", "image/png");
   gridfsbucket
     .openDownloadStreamByName(filename)
     .pipe(res)

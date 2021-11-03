@@ -1,4 +1,11 @@
-# nodeJS
+# nodeJS學習
+預計使用nodeJS 和 Express 套件架設基礎的http服務。並串接line-bot message API。
+實作功能:line官方帳號訊息回覆和紀錄、推播文字和圖片訊息。
+
+使用語言: javascript
+套件模組:nodeJS、express
+第三方服務: line-developer API 、 MongoDB
+部屬工具:Heroku
 
 # 開發環境與套件安裝
 
@@ -65,7 +72,9 @@ app.listen(port,()=>{
 
 ```
 
-[![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635141074694.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635141074694.jpg)# line官方頻道 、 Messaging API、mongoDB 設定
+[![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635141074694.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635141074694.jpg)
+
+# line官方頻道 、 Messaging API、mongoDB 設定
 
 ### 官方line
 
@@ -116,10 +125,8 @@ const uri = "mongodb+srv://<user>:<password>@<Cluster name>.f2mhj.mongodb.net/<D
   "mongodb+srv://lien0103:xxxxxx@chatroom.f2mhj.mongodb.net/line?retryWrites=true&w=majority";
 
 
-```# 功能實作
-
-### Express App 和 mongoDB
-
+```
+# 功能實作
 #### 進入點:herokuApp.js
 
 app啟動流程，會先使用mongoose模組連接mondoDB，這裡會使用到的uri必須填入在mondoDB後台所設定的資訊。 連接mondoDB成功後，會使用Express提供的listen API 把這個服務啟動。
@@ -138,7 +145,6 @@ node herokuApp.js
 //connected to DB
 //line-bot-dopee listening on 3005
 
-
 ```
 
 - - - - - -
@@ -147,10 +153,11 @@ node herokuApp.js
 
 [Messaging API reference](https://developers.line.biz/en/reference/messaging-api/)
 
-#### 服務流程:
+### 服務流程
 
 [![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635234574868.png)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635234574868.png)
 
+### 功能
 #### 1.推播訊息給官方line user
 
 [Messaging API reference #send-broadcast-message](https://developers.line.biz/en/reference/messaging-api/#send-broadcast-message)
@@ -315,7 +322,8 @@ module.exports.handleFileUploadToMongoDB = (req, res, next) => {
 };
 
 
-```# Heroku 佈署
+``` 
+# Heroku 部署
 
 ### Heroku
 
@@ -327,9 +335,9 @@ Heroku是一個支援多種程式語言的雲平台即服務。在2010年被Sale
 
 本次使用的是line-bot-doope [![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635301821713.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635301821713.jpg)
 
-### 佈署設定
+### 部署設定
 
-server佈署時預設是執行 npm start 所對應的腳本。所以在package.json需要有對應的在專案的啟動指令
+server部署時預設是執行 npm start 所對應的腳本。所以在package.json需要有對應的在專案的啟動指令
 
 ```json=
 //package.json
@@ -341,7 +349,7 @@ server佈署時預設是執行 npm start 所對應的腳本。所以在package.j
 
 ```
 
-### 確認佈署的source
+### 確認部署的source
 
 在介面上可以專案來自github，所以專案在本機修改後，可推送到github。
 
@@ -356,7 +364,7 @@ heroku login
 #把本地專案跟heroku app綁定
 heroku git:remote -a ${heroku app name} # line-bot-doope
 
-#佈署 (把本地的分支版本推上heroku app 就會開始佈署)
+#部署 (把本地的分支版本推上heroku app 就會開始部署)
 git push heroku ${分支名稱}  #master、main...
 
 #查看運行時的log
@@ -365,8 +373,8 @@ heroku logs --tail
 
 ```
 
-進入到heroku app 的介面，也可以進行操作 [![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635302712788-heroku-com-apps-line-bot-doope-deploy-github-li.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635302712788-heroku-com-apps-line-bot-doope-deploy-github-li.jpg)# 小結
-
+進入到heroku app 的介面，也可以進行操作 [![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635302712788-heroku-com-apps-line-bot-doope-deploy-github-li.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635302712788-heroku-com-apps-line-bot-doope-deploy-github-li.jpg) 
+# 小結
 ### 豆皮機器人回應
 
 [![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635305902289.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635305902289.jpg)
@@ -381,4 +389,4 @@ heroku logs --tail
 
 - - - - - -
 
-參考資源彙整: [神Q超人 heroku佈署基礎教學](https://medium.com/enjoy-life-enjoy-coding/heroku-%E6%90%AD%E9%85%8D-git-%E5%9C%A8-heroku-%E4%B8%8A%E9%83%A8%E7%BD%B2%E7%B6%B2%E7%AB%99%E7%9A%84%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E5%AD%B8-bf4fd6f998b8)
+參考資源彙整: [神Q超人 heroku部署基礎教學](https://medium.com/enjoy-life-enjoy-coding/heroku-%E6%90%AD%E9%85%8D-git-%E5%9C%A8-heroku-%E4%B8%8A%E9%83%A8%E7%BD%B2%E7%B6%B2%E7%AB%99%E7%9A%84%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E5%AD%B8-bf4fd6f998b8)

@@ -5,7 +5,7 @@
 使用語言: javascript
 套件模組:nodeJS、express
 第三方服務: line-developer API 、 MongoDB
-部屬工具:Heroku
+部署工具:Heroku
 
 # 開發環境與套件安裝
 

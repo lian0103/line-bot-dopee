@@ -26,7 +26,7 @@ module.exports.handleFileUploadToMongoDB = (req, res, next) => {
     });
 };
 
-module.exports.handleGetUploadFileFromMongoDB = async (req, res, next) => {
+module.exports.handleGetUploadFileFromMongoDB = (req, res, next) => {
   const filename = req.params.filename;
   console.log("get download " + filename);
 
@@ -35,7 +35,7 @@ module.exports.handleGetUploadFileFromMongoDB = async (req, res, next) => {
     bucketName: "filesBucket",
   });
 
-  await res.setHeader("Content-type", "image/png");
+  res.setHeader("Content-type", "image/png");
   gridfsbucket
     .openDownloadStreamByName(filename)
     .pipe(res)

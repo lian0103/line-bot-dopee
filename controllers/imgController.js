@@ -1,6 +1,6 @@
 const path = require("path");
-var streamifier = require("streamifier");
-var mongoose = require("mongoose");
+const streamifier = require("streamifier");
+const mongoose = require("mongoose");
 
 module.exports.handleFileUploadToMongoDB = (req, res, next) => {
   let filename = req.files.file.name;

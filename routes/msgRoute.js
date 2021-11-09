@@ -18,7 +18,7 @@ router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
 
 /**
  * @swagger
- * /broadcastAll/{psw}/{msg}
+ * /broadcastAll/{psw}/{msg}:
  *    post:
  *      description: 推播訊息
  *    parameters:
@@ -37,8 +37,8 @@ router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
  *          type: string
  *          format: string
  *    responses:
- *      '201':
- *        description: Successfully created user
+ *      '200':
+ *        description: Successfully pushed
  */
 router.post("/broadcastAll/:psw/:msg",msgController.broadcastAll)
 

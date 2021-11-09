@@ -12,7 +12,9 @@
     "mongoose": "^6.0.9",
     "multer": "^1.4.3",
     "request": "^2.88.2",
-    "streamifier": "^0.1.1"
+    "streamifier": "^0.1.1",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {},
   "scripts": {

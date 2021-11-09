@@ -14,7 +14,8 @@
     "request": "^2.88.2",
     "streamifier": "^0.1.1",
     "swagger-jsdoc": "^6.1.0",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {},
   "scripts": {

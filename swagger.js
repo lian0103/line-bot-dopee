@@ -1,4 +1,3 @@
-
 module.exports = {
   swaggerDefinition: {
     info: {
@@ -10,6 +9,21 @@ module.exports = {
       },
       servers: [process.env.DOMAIN_URL],
     },
+    definitions: {
+      Account: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            description:"帳號"
+          },
+          psw: {
+            type: "string",
+            description:"密碼"
+          },
+        },
+      },
+    },
   },
-  apis: ["./routes/msgRoute.js"],
+  apis: ["./routes/*.js"],
 };

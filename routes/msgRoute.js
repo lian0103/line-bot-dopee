@@ -20,6 +20,20 @@ router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
 
 /**
  * @swagger
+ * /queryAllMsgRecord:
+ *  get:
+ *    tags:
+ *     - message
+ *    description: 撈今天收到的訊息
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ * 
+ */
+ router.get("/queryAllMsgRecord", msgController.getAllMsg);
+
+/**
+ * @swagger
  * /broadcastAll/{psw}/{msg}:
  *    post:
  *      tags:

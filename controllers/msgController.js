@@ -106,6 +106,15 @@ module.exports.getTodayMsg = async (req, res) => {
   });
 };
 
+
+module.exports.getAllMsg = async (req, res) => {
+  let query = linebotModel.find();
+
+  query.then((result) => {
+    return res.status(200).json(result);
+  });
+};
+
 module.exports.broadcastAll = async (req, res) => {
   let { psw, msg, img } = req.params;
   console.log(psw, msg, img);

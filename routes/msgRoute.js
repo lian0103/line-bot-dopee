@@ -8,6 +8,8 @@ const router = Router();
  * @swagger
  * /queryTodayMsgRecord:
  *  get:
+ *    tags:
+ *     - message
  *    description: 撈今天收到的訊息
  *    responses:
  *      '200':
@@ -20,6 +22,8 @@ router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
  * @swagger
  * /broadcastAll/{psw}/{msg}:
  *    post:
+ *      tags:
+ *       - message
  *      description: 推播訊息
  *    parameters:
  *      - name: psw

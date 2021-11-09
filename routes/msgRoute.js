@@ -18,19 +18,19 @@ router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
 
 /**
  * @swagger
- * /broadcastAll/:psw/:msg:
+ * /broadcastAll/{psw}/{msg}
  *    post:
  *      description: 推播訊息
  *    parameters:
  *      - name: psw
- *        in: query
+ *        in: path
  *        description: 密碼
  *        required: true
  *        schema:
  *          type: string
  *          format: string
  *      - name: msg
- *        in: query
+ *        in: path
  *        description: 訊息
  *        required: true
  *        schema:

@@ -14,7 +14,7 @@ module.exports.handleFileUploadToMongoDB = (req, res, next) => {
     .createReadStream(req.files.file.data)
     .pipe(gridfsbucket.openUploadStream(filename))
     .on("error", function (error) {
-      console.log(err);
+      res.status(501).json({ msg: "上傳圖檔有錯" });
     })
     .on("finish", function () {
       console.log("done!");

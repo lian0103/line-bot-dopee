@@ -61,27 +61,33 @@ swaggerDefinition:
         response:
           '200':
             description: 上傳成功
-    /upload/{image}: 
-      get:
-        tags:
-          - 推播圖片
-        parameters:
-          - name: image
-            in: path
-            description: image name
-            required: true
-            type: string
-            schema: 
-              type: string
-              format: string
-        responses:
-          '200':
-            description: image OK!
-            content:
-              image/png:
-                schema:
-                  type: string
-                  format: binary
+    # /upload/{image}: 
+    #   get:
+    #     tags:
+    #       - 推播圖片
+    #     parameters:
+    #       - name: image
+    #         in: path
+    #         description: image name
+    #         required: true
+    #         type: string
+    #         schema: 
+    #           type: string
+    #           format: string
+    #     responses:
+    #       '200':
+    #         description: image OK!
+    #         content:
+    #           image/png:
+    #             schema:
+    #               type: string
+    #               format: binary
+    #       '404':
+    #         description: fail
+    #         content:
+    #           application/json:
+    #             schema:
+    #               "$ref": "#/components/schemas/failReply"
   components:
     schemas:
       MsgPush:
@@ -91,6 +97,12 @@ swaggerDefinition:
             type: string
             format: string
           img:
+            type: string
+            format: string
+      failReply: 
+        type: object
+        properties:
+          msg:
             type: string
             format: string
 apis: ["./routes/*.js"]

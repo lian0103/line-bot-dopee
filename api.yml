@@ -5,22 +5,6 @@ swaggerDefinition:
     version: 1.0.1
     title: Swagger API Docs
   paths:
-    # /login:
-    #   post:
-    #     tags:
-    #       - 帳號
-    #     summary: 登入
-    #     consumes:
-    #       - application/json
-    #     parameters:
-    #       - in: body
-    #         name: user
-    #         description: 帳號密碼
-    #         schema:
-    #           "$ref": "#/components/schemas/AccountInfo"
-    #     responses:
-    #       200:
-    #         description: 登入
     /msgRecords:
       get:
         tags:
@@ -56,27 +40,57 @@ swaggerDefinition:
         parameters:
           - in: body
             name: 內容
-            description: 推送內容
+            description: 推送內容。img欄位為圖片檔名，需要先透過post /upload後才可以推送成功
             schema:
               "$ref": "#/components/schemas/MsgPush"
         response:
           '200':
             description: A successful response
+    /upload:
+      post:
+        tags: 
+          - 推播圖片
+        consumes:
+          - multipart/form-data
+        parameters:
+          - name: file
+            in: formData  
+            description: The uploaded file data
+            required: true
+            type: file
+        response:
+          '200':
+            description: 上傳成功
+    /upload/{image}: 
+      get:
+        tags:
+          - 推播圖片
+        parameters:
+          - name: image
+            in: path
+            description: image name
+            required: true
+            type: string
+            schema: 
+              type: string
+              format: string
+        responses:
+          '200':
+            description: image OK!
+            content:
+              image/png:
+                schema:
+                  type: string
+                  format: binary
   components:
     schemas:
-      # AccountInfo:
-      #   type: object
-      #   properties:
-      #     name:
-      #       type: string
-      #       format: string
-      #     psw: 
-      #       type: string
-      #       format: string
       MsgPush:
         type: object
         properties:
           msg:
+            type: string
+            format: string
+          img:
             type: string
             format: string
 apis: ["./routes/*.js"]

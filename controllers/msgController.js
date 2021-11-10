@@ -29,7 +29,6 @@ function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// event handler
 async function handleMsgReply(event) {
   let replyMsg = "";
   let replyImg = null;
@@ -78,10 +77,6 @@ async function handleMsgReply(event) {
       replyMsg += "今日已無話可說^.^";
     }
   }
-  // console.log("~~~~~~~~~~~~~~~~~~~~~~");
-  // console.log(event.type);
-  // console.log(event.message);
-  // console.log("~~~~~~~~~~~~~~~~~~~~~~");
   if (event.message.text) {
     let doc = new linebotModel({
       name: profile.displayName,
@@ -106,7 +101,6 @@ module.exports.getTodayMsg = async (req, res) => {
   });
 };
 
-
 module.exports.getAllMsg = async (req, res) => {
   let query = linebotModel.find();
 
@@ -116,11 +110,9 @@ module.exports.getAllMsg = async (req, res) => {
 };
 
 module.exports.broadcastAll = async (req, res) => {
-  let { psw, msg, img } = req.params;
-  console.log(psw, msg, img);
-  if (psw != "28") {
-    return res.json({ status: 302, msg: "密碼錯誤^^" });
-  }
+  let { msg, img } = req.body;
+
+  console.log(msg, img);
 
   if (msg && msg != "") {
     let body = img
@@ -133,7 +125,7 @@ module.exports.broadcastAll = async (req, res) => {
             {
               type: "image",
               originalContentUrl: herokuURL + `/upload/${img}`,
-              previewImageUrl:  herokuURL + `/upload/${img}`,
+              previewImageUrl: herokuURL + `/upload/${img}`,
             },
           ],
         }
@@ -160,7 +152,7 @@ module.exports.broadcastAll = async (req, res) => {
       res.json(result);
     });
   } else {
-    res.json({ status: 301, msg: "error!" });
+    res.json({ status: 301, msg: "broadcastAll error!", body: req.body });
   }
 };
 

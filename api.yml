@@ -1,37 +1,73 @@
 openapi: 3.0.0
 swaggerDefinition:
   info:
-    description: Something about the API
-    version: 1.0.0
-    title: Test API
-  servers:
-    - url: /api/v1
+    description: API
+    version: 1.0.1
+    title: Swagger API Docs
   paths:
-    /login:
+    # /login:
+    #   post:
+    #     tags:
+    #       - 帳號
+    #     summary: 登入
+    #     consumes:
+    #       - application/json
+    #     parameters:
+    #       - in: body
+    #         name: user
+    #         description: 帳號密碼
+    #         schema:
+    #           "$ref": "#/components/schemas/AccountInfo"
+    #     responses:
+    #       200:
+    #         description: 登入
+    /queryTodayMsgRecord:
+      get:
+        tags:
+          - 留言訊息紀錄
+        description: 撈今天收到的訊息
+        responses:
+          '200':
+            description: A successful response
+    /queryAllMsgRecord:
+      get:
+        tags:
+          - MsgRecord
+        description: 撈今天收到的訊息
+        responses:
+          '200':
+            description: A successful response
+    /broadcastAll:
       post:
         tags:
-          - 帳號
-        summary: 登入
+          - 訊息推播
+        description: 官方line頻道訊息
         consumes:
           - application/json
         parameters:
           - in: body
-            name: user
-            description: 帳號密碼
+            name: 內容
+            description: 推送內容
             schema:
-              "$ref": "#/components/schemas/AccountInfo"
-        responses:
-          200:
-            description: 登入
+              "$ref": "#/components/schemas/MsgPush"
+        response:
+          '200':
+            description: A successful response
   components:
     schemas:
-      AccountInfo:
+      # AccountInfo:
+      #   type: object
+      #   properties:
+      #     name:
+      #       type: string
+      #       format: string
+      #     psw: 
+      #       type: string
+      #       format: string
+      MsgPush:
         type: object
         properties:
-          name:
-            type: string
-            format: string
-          psw: 
+          msg:
             type: string
             format: string
 apis: ["./routes/*.js"]

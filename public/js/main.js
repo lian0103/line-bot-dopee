@@ -7,7 +7,7 @@ $(document).ready(function () {
     imgFile = $("#fileInput").prop("files")[0];
 
     if (imgFile) {
-      $('#imgboxNextSvg').hide();
+      $("#imgboxNextSvg").hide();
       $("#imgbox").empty();
       let src = URL.createObjectURL(imgFile);
       let imgTemp = `<p class="text-gray-700">名稱:${imgFile.name}</p> <img class='' src=${src} />`;
@@ -20,12 +20,6 @@ $(document).ready(function () {
       $("#sendError").text("請輸入訊息");
       return false;
     }
-
-    if (!$("#msgInputPsw").val()) {
-      $("#sendError").text("請輸入密碼");
-      return false;
-    }
-
     let uploadFilename = null;
     if (imgFile) {
       await new Promise((resolve, reject) => {
@@ -39,7 +33,7 @@ $(document).ready(function () {
           contentType: false,
           type: "POST",
           success: function (data) {
-            console.log(data);
+            // console.log(data);
             uploadFilename = data.filename;
             resolve(true);
           },
@@ -51,32 +45,25 @@ $(document).ready(function () {
     }
 
     $("#sendError").text("");
-    let msg = encodeURIComponent($("#msgInput").val());
-    let psw = encodeURIComponent($("#msgInputPsw").val());
+    let msg = $("#msgInput").val();
 
-    let url = uploadFilename
-      ? domain + `/broadcastAll/${psw}/${msg}/${uploadFilename}`
-      : domain + `/broadcastAll/${psw}/${msg}`;
-
-    $.ajax({
-      url,
-      method: "POST",
-      dataType: "json",
-      success: function (res) {
-        console.log(res);
+    axios
+      .post(domain + "/broadcastAll", {
+        msg: msg,
+        img: uploadFilename,
+      })
+      .then((res) => {
         $("#msgInput").val("");
-        $("#msgInputPsw").val("");
         imgFile = null;
         $("#imgbox").empty();
-        $('#imgboxNextSvg').show();
+        $("#imgboxNextSvg").show();
         if (res.status != 200) {
           $("#sendError").text(res.msg);
         }
-      },
-      error: function (err) {
+      })
+      .catch((err) => {
         $("#sendError").text(err);
-      },
-    });
+      });
   });
 
   $("#btnQuery").on("click", function () {

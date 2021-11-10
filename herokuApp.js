@@ -25,7 +25,7 @@ app.use(require("./routes/loginRoute"));
 app.use(require("./routes/fileUploadRoute"));
 app.use(require("./routes/imgRoute"));
 app.use(require("./routes/lineBotCallback"));
-app.use(require("./routes/msgRoute"));
+app.use([express.json(), require("./routes/msgRoute")]);
 
 app.use(require("./routes/defaultRoute")); //必須擺最後
 

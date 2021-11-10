@@ -112,8 +112,8 @@ module.exports.getAllMsg = async (req, res) => {
 };
 
 module.exports.broadcastAll = async (req, res) => {
-  let { msg, img } = req.body;
-
+  let { msg, img } = req.body || {};
+  // console.log(req)
   console.log(msg, img);
 
   if (msg && msg != "") {

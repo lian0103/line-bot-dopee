@@ -24,7 +24,7 @@ swaggerDefinition:
     /queryTodayMsgRecord:
       get:
         tags:
-          - 留言訊息紀錄
+          - 留言訊息
         description: 撈今天收到的訊息
         responses:
           '200':
@@ -32,7 +32,7 @@ swaggerDefinition:
     /queryAllMsgRecord:
       get:
         tags:
-          - MsgRecord
+          - 留言訊息
         description: 撈今天收到的訊息
         responses:
           '200':

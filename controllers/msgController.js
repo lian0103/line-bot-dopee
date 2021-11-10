@@ -105,7 +105,7 @@ module.exports.getTodayMsg = async (req, res) => {
 };
 
 module.exports.getAllMsg = async (req, res) => {
-  let query = linebotModel.find();
+  let query = linebotModel.find({updated:-1});
 
   query.then((result) => {
     return res.status(200).json(result);
@@ -113,7 +113,7 @@ module.exports.getAllMsg = async (req, res) => {
 };
 
 module.exports.getBroadcast = (req, res) => {
-  let query = msgBrocastModel.find();
+  let query = msgBrocastModel.find({updated:-1});
 
   query.then((result) => {
     return res.status(200).json(result);

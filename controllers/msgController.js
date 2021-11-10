@@ -124,13 +124,8 @@ module.exports.broadcast = async (req, res) => {
   let { msg, img } = req.body || {};
   // console.log(req)
   console.log(msg, img);
-  let doc = new msgBrocastModel({
-    msg,
-    img: img ? img : "",
-  });
-  await doc.save();
 
-  if (msg && msg != "" && false) {
+  if (msg && msg != "") {
     let body = img
       ? {
           messages: [

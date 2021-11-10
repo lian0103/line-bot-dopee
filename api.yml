@@ -21,7 +21,7 @@ swaggerDefinition:
     #     responses:
     #       200:
     #         description: 登入
-    /msgRecordToday:
+    /msgRecords:
       get:
         tags:
           - 留言訊息
@@ -29,7 +29,7 @@ swaggerDefinition:
         responses:
           '200':
             description: A successful response
-    /msgRecordAll:
+    /msgRecords/today:
       get:
         tags:
           - 留言訊息
@@ -37,7 +37,7 @@ swaggerDefinition:
         responses:
           '200':
             description: A successful response
-    /broadcastAll:
+    /broadcast:
       post:
         tags:
           - 訊息推播

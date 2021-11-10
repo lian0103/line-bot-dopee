@@ -155,11 +155,11 @@ node herokuApp.js
 
 在msgController.js暴露了3個方法 [![](https://books.greattree.com.tw/uploads/images/gallery/2021-10/scaled-1680-/image-1635236022987.jpg)](https://books.greattree.com.tw/uploads/images/gallery/2021-10/image-1635236022987.jpg)
 
-broadcastAll是用來呼叫 line send-broadcast-message
+broadcast是用來呼叫 line send-broadcast-message
 
 ```javascript=
 //msgController.js
-module.exports.broadcastAll = async (req, res) => {
+module.exports.broadcast = async (req, res) => {
 ...(略)
   if (msg && msg != "") { //msg是從後台畫面帶來。
     let reqOption = {

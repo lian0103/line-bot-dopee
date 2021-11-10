@@ -111,7 +111,7 @@ module.exports.getAllMsg = async (req, res) => {
   });
 };
 
-module.exports.broadcastAll = async (req, res) => {
+module.exports.broadcast = async (req, res) => {
   let { msg, img } = req.body || {};
   // console.log(req)
   console.log(msg, img);
@@ -154,7 +154,7 @@ module.exports.broadcastAll = async (req, res) => {
       res.json(result);
     });
   } else {
-    res.json({ status: 301, msg: "broadcastAll error!", body: req.body });
+    res.json({ status: 301, msg: "broadcast error!", body: req.body });
   }
 };
 

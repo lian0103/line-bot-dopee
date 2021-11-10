@@ -48,7 +48,7 @@ $(document).ready(function () {
     let msg = $("#msgInput").val();
 
     axios
-      .post(domain + "/broadcastAll", {
+      .post(domain + "/broadcast", {
         msg: msg,
         img: uploadFilename,
       })
@@ -68,7 +68,7 @@ $(document).ready(function () {
 
   $("#btnQuery").on("click", function () {
     $.ajax({
-      url: domain + "/msgRecordToday",
+      url: domain + "/msgRecords/today",
       method: "GET",
       dataType: "json",
       success: function (res) {

@@ -4,10 +4,10 @@ const msgController = require("../controllers/msgController.js");
 
 const router = Router();
 
-router.get("/msgRecordToday", msgController.getTodayMsg);
+router.get("/msgRecords", msgController.getAllMsg);
 
-router.get("/msgRecordAll", msgController.getAllMsg);
+router.get("/msgRecords/today", msgController.getTodayMsg);
 
-router.post("/broadcastAll", msgController.broadcastAll);
+router.post("/broadcast", msgController.broadcast);
 
 module.exports = router;

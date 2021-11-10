@@ -1,6 +1,7 @@
 const request = require("request");
 const line = require("@line/bot-sdk");
 const linebotModel = require("../models/linebotModel");
+const msgBrocastModel = require("../models/msgBrocastModel");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
@@ -33,7 +34,7 @@ function getRandom(min, max) {
 async function handleMsgReply(event) {
   let replyMsg = "";
   let replyImg = null;
-  console.log(event)
+  console.log(event);
 
   if (
     event.message.text &&
@@ -111,12 +112,25 @@ module.exports.getAllMsg = async (req, res) => {
   });
 };
 
+module.exports.getBroadcast = (req, res) => {
+  let query = msgBrocastModel.find();
+
+  query.then((result) => {
+    return res.status(200).json(result);
+  });
+};
+
 module.exports.broadcast = async (req, res) => {
   let { msg, img } = req.body || {};
   // console.log(req)
   console.log(msg, img);
+  let doc = new msgBrocastModel({
+    msg,
+    img: img ? img : "",
+  });
+  await doc.save();
 
-  if (msg && msg != "") {
+  if (msg && msg != "" && false) {
     let body = img
       ? {
           messages: [
@@ -149,8 +163,14 @@ module.exports.broadcast = async (req, res) => {
       },
       body: JSON.stringify(body),
     };
-    request.post(reqOption, (error, result, body) => {
+    request.post(reqOption, async (error, result, body) => {
       // console.log(result);
+      let doc = new msgBrocastModel({
+        msg,
+        img: img ? img : "",
+      });
+      await doc.save();
+
       res.json(result);
     });
   } else {

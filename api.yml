@@ -29,6 +29,8 @@ swaggerDefinition:
         responses:
           '200':
             description: A successful response
+          '301':
+            description: brocast fail
     /msgRecords/today:
       get:
         tags:
@@ -38,6 +40,13 @@ swaggerDefinition:
           '200':
             description: A successful response
     /broadcast:
+      get:
+        tags: 
+          - 訊息推播
+        description: 官方line頻道訊息  
+        responses:
+          '200':
+            description: A successful response
       post:
         tags:
           - 訊息推播

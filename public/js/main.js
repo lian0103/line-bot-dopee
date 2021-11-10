@@ -68,7 +68,7 @@ $(document).ready(function () {
 
   $("#btnQuery").on("click", function () {
     $.ajax({
-      url: domain + "/queryTodayMsgRecord",
+      url: domain + "/msgRecordToday",
       method: "GET",
       dataType: "json",
       success: function (res) {

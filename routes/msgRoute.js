@@ -4,9 +4,9 @@ const msgController = require("../controllers/msgController.js");
 
 const router = Router();
 
-router.get("/queryTodayMsgRecord", msgController.getTodayMsg);
+router.get("/msgRecordToday", msgController.getTodayMsg);
 
-router.get("/queryAllMsgRecord", msgController.getAllMsg);
+router.get("/msgRecordAll", msgController.getAllMsg);
 
 router.post("/broadcastAll", msgController.broadcastAll);
 

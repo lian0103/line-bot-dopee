@@ -29,9 +29,11 @@ function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// event handler
 async function handleMsgReply(event) {
   let replyMsg = "";
   let replyImg = null;
+  console.log(event)
 
   if (
     event.message.text &&

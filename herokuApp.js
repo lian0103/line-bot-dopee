@@ -10,7 +10,7 @@ const mongoDB = require("./mongoDB");
 //middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
-app.use(express.json());
+// app.use(express.json());
 
 const YAML = require('yamljs')
 const swaggerJsDoc = require("swagger-jsdoc");

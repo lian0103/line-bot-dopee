@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"
+      integrity="sha512-u9akINsQsAkG9xjc1cnGF4zw5TFDwkxuc9vUp5dltDWYCSmyd0meygbvgXrlc/z7/o4a19Fb5V0OUE58J7dcyw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      .header {
+        height: 62px;
+      }
+      .header label {
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+      }
+      .header label button {
+        line-height: 1;
+      }
+
+      #listCard {
+        max-height: calc(100vh - 85px);
+        overflow-y: scroll;
+      }
+    </style>
+
+    <title>crawler</title>
+  </head>
+  <body>
+    <div class="header w-full px-2 my-2 flex">
+      <label class="block text-left inline-block px-4">
+        <span class="text-gray-700">看板選擇</span>
+        <select id="selectBoard" class="form-select block w-full mt-1">
+          <option value="Stock">股票版</option>
+          <option value="Beauty">表特版</option>
+        </select>
+      </label>
+      <label class="block text-left inline-block px-4">
+        <span class="text-gray-700">撈取頁數</span>
+        <input
+          id="inputPage"
+          value="1"
+          class="
+            shadow
+            appearance-none
+            border
+            rounded
+            w-full
+            py-2
+            px-3
+            text-gray-700
+            leading-tight
+            focus:outline-none focus:shadow-outline
+          "
+          type="number"
+          max="20"
+          min="1"
+        />
+      </label>
+      <label class="block text-left inline-block flex px-4">
+        <button
+          id="btnSearch"
+          class="
+            w-24
+            h-8
+            bg-blue-500
+            hover:bg-blue-700
+            text-white
+            font-bold
+            px-4
+            mt-2
+            rounded-full
+          "
+        >
+          搜尋
+        </button>
+      </label>
+    </div>
+    <div class="container flex">
+      <div id="listCard" class="py-2 w-1/4"></div>
+      <div id="itemContent" class="w-3/4"></div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("#btnSearch").on("click", function () {
+          let board = $("#selectBoard").val();
+          let page = $("#inputPage").val();
+          console.log(board);
+          console.log(page);
+
+          let queryUrl = `/pttCrawler?board=${board}&page=${page}`;
+
+          axios.get(queryUrl).then((res) => {
+            console.log(res);
+            let data = res.data.data.reduce((prev, next) => prev.concat(next));
+            let htmltemp = "";
+
+            data.forEach((item) => {
+              let temp = `
+                <div class="flex h-24 max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden mx-2 my-2" onclick='handleCardClick( "{{link}}" )'>
+                    <div class="w-2 bg-gray-800"></div>
+                    <div class="flex items-center px-2 py-3">
+                        <img
+                        class="w-10 h-10 object-cover rounded-full"
+                        alt="User avatar"
+                        src="https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=200&q=200"
+                        />
+                        <div class="mx-3">
+                        <p class="text-gray-600">{{title}} {{date}}</p>
+                        <p class="text-gray-600">作者:{{author}}</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+              //www.ptt.cc/bbs/Beauty/M.1636653938.A.CA9.html
+              temp = temp.replace("{{link}}", "https://www.ptt.cc" + item.link);
+              temp = temp.replace("{{title}}", item.title);
+              temp = temp.replace("{{date}}", item.date);
+              temp = temp.replace("{{author}}", item.author);
+              htmltemp += temp;
+            });
+            $("#listCard").empty();
+            $("#listCard").append(htmltemp);
+          });
+        });
+      });
+
+      function handleCardClick(link) {
+        console.log(link);
+        let width = window.innerWidth - $("#listCard").width() - 20;
+        let height = window.innerHeight - 100 ;
+
+        let htmlTemp = `<iframe class="mx-4" src="${link}" width="${width}" height="${height}">`;
+        $("#itemContent").empty();
+        $("#itemContent").append(htmlTemp);
+      }
+    </script>
+  </body>
+</html>

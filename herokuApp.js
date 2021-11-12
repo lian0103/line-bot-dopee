@@ -12,15 +12,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(fileUpload());
 // app.use(express.json());
 
-const YAML = require('yamljs')
+const YAML = require("yamljs");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 // const swaggerOption = require("./swagger.js");
-const swaggerOption = YAML.load('api.yml');
+const swaggerOption = YAML.load("api.yml");
 const swaggerDoc = swaggerJsDoc(swaggerOption);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
-
+app.use(require("./routes/crawlerRoute"));
 app.use(require("./routes/loginRoute"));
 app.use(require("./routes/fileUploadRoute"));
 app.use(require("./routes/imgRoute"));

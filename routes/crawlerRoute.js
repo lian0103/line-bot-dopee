@@ -11,4 +11,6 @@ router.get("/crawler", (req, res) => {
 
 router.get("/pttCrawler",crawlerController.handlePttCrawler)
 
+router.get("/pttCrawler/targetImgs",crawlerController.handlePttCrawlerGetImgs)
+
 module.exports = router;

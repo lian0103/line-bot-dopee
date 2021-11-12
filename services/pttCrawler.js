@@ -28,7 +28,7 @@ const getCurPage = (board) => {
           case "Beauty": {
             let $ = cheerio.load(body); // 載入 body
 
-            const browser = await puppeteer.launch({ headless: true });
+            const browser = await puppeteer.launch({ignoreDefaultArgs: ['--disable-extensions'], headless: true });
             const page = await browser.newPage();
             await page.setRequestInterception(true);
             page.on("request", (request) => {
@@ -88,7 +88,7 @@ const getCurPage = (board) => {
 const getContainImgs = (url) => {
   // console.log(url);
   return new Promise(async (resolv, reject) => {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ignoreDefaultArgs: ['--disable-extensions'], headless: true });
     const page = await browser.newPage();
     await page.setRequestInterception(true);
     page.on("request", (request) => {
@@ -131,7 +131,7 @@ const getContainImgs = (url) => {
 
 const requestData = (board, url) => {
   return new Promise(async (resolv, reject) => {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ ignoreDefaultArgs: ['--disable-extensions'], headless: true });
     const page = await browser.newPage();
     await page.setRequestInterception(true);
     page.on("request", (request) => {
@@ -204,7 +204,7 @@ const pttCrawler = ({ board = "Beauty", page = 3, img }) => {
 
 async function test() {
   const url = "https://www.ptt.cc/bbs/Beauty/M.1636641491.A.A33.html";
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ignoreDefaultArgs: ['--disable-extensions'], headless: true });
   const page = await browser.newPage();
 
   Promise.all([

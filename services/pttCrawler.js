@@ -181,9 +181,10 @@ const requestCardListDatas = (url) => {
   });
 };
 
-const pttCrawler = ({ board = "Beauty", page = 3, img }) => {
+const pttCrawler = ({ board = "Beauty", page = 2, img }) => {
   console.log("in~~pttCrawler");
   console.log(board, page);
+  page = parseInt(page) > 2 ? 2 : page;
 
   return new Promise(async (resolv, reject) => {
     let promiseArr = [];

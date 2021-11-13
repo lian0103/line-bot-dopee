@@ -137,7 +137,7 @@ const getContainImgs = (url) => {
   });
 };
 
-const requestData = (board, url) => {
+const requestCardListDatas = (url) => {
   return new Promise(async (resolv, reject) => {
     const browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -157,34 +157,27 @@ const requestData = (board, url) => {
         request.continue();
       }
     });
-    await page.goto(url);
 
-    switch (board) {
-      case "Beauty": {
-        const buttonSelector =
-          "body > div.bbs-screen.bbs-content.center.clear > form > div:nth-child(2) > button";
-        await Promise.all([
-          page.click(buttonSelector),
-          page.waitForNavigation(),
-        ]);
-        break;
+    Promise.all([
+      page.setCookie({ url: url, name: "over18", value: "1" }),
+      page.goto(url),
+    ]).then(async () => {
+      const content = await page.content();
+      $ = cheerio.load(content);
+
+      const list = $(".r-list-container .r-ent");
+      let data = [];
+      for (let i = 0; i < list.length; i++) {
+        const title = list.eq(i).find(".title a").text();
+        const author = list.eq(i).find(".meta .author").text();
+        const date = list.eq(i).find(".meta .date").text();
+        const link = list.eq(i).find(".title a").attr("href");
+
+        data.push({ title, author, date, link });
       }
-    }
-    const content = await page.content();
-    $ = cheerio.load(content);
-
-    const list = $(".r-list-container .r-ent");
-    let data = [];
-    for (let i = 0; i < list.length; i++) {
-      const title = list.eq(i).find(".title a").text();
-      const author = list.eq(i).find(".meta .author").text();
-      const date = list.eq(i).find(".meta .date").text();
-      const link = list.eq(i).find(".title a").attr("href");
-
-      data.push({ title, author, date, link });
-    }
-    await browser.close();
-    resolv(data);
+      await browser.close();
+      resolv(data);
+    });
   });
 };
 
@@ -200,9 +193,8 @@ const pttCrawler = ({ board = "Beauty", page = 3, img }) => {
       .map((cur, index) => cur - index);
     console.log("arr", arr);
     arr.forEach((pageNum) => {
-      // console.log(getFormatPageUrl(board, pageNum));
       let url = getFormatPageUrl(board, pageNum);
-      promiseArr.push(requestData(board, url));
+      promiseArr.push(requestCardListDatas(url));
     });
     Promise.all(promiseArr)
       .then((resAll) => {

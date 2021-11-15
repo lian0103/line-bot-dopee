@@ -28,7 +28,7 @@ module.exports.handlePttCrawler = async (req, res) => {
   if (page > 20) {
     res
       .status(400)
-      .json({ status: 400, query: req.query, msg: "page請小於等於20" });
+      .json({ status: 400, query: req.query, msg: "page請小於等於2" });
   }
 
 

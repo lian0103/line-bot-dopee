@@ -126,8 +126,8 @@
             text-center
           "
         >
-          <option value="Beauty">表特版</option>
           <option value="Stock">股票版</option>
+          <option value="Beauty">表特版</option>
         </select>
       </label>
       <label class="block text-left inline-block px-4">
@@ -231,45 +231,40 @@
 
         let board = $("#selectBoard").val();
 
-        switch (board) {
-          case "Stock":
-            let width =
-              window.innerWidth > 800
-                ? window.innerWidth - $("#listCard").width() - 20
-                : window.innerWidth;
-            let height =
-              window.innerWidth > 800
-                ? window.innerHeight - 100
-                : window.innerHeight / 2 - 50;
+        if (["Stock"].includes(board)) {
+          let width =
+            window.innerWidth > 800
+              ? window.innerWidth - $("#listCard").width() - 20
+              : window.innerWidth;
+          let height =
+            window.innerWidth > 800
+              ? window.innerHeight - 100
+              : window.innerHeight / 2 - 50;
 
-            let htmlTemp = `<iframe class="mx-4" src="${link}" width="${width}" height="${height}">`;
-            $("#itemContent").empty();
-            $("#itemContent").append(htmlTemp);
-            break;
-          case "Beauty":
-            let queryUrl = `/pttCrawler/targetImgs?url=${link}`;
-            axios.get(queryUrl).then((res) => {
-              console.log(res);
-              let target = res.data.data || [];
-              if (target.length > 0) {
-                let htmlTemp = "<ul id='images'>";
-                target.forEach((img, index) => {
-                  htmlTemp += `<li class="inline-block w-1/2"><img id=${
-                    "img" + index
-                  } onclick='handleView(${index})' class="object-contain" src="${img}" alt="Picture ${index}"></li>`;
-                });
-                htmlTemp += "</ul>";
-                $("#itemContent").empty();
-                $("#itemContent").append(htmlTemp);
-              } else {
-                let htmlTemp = "<p>無圖片</p>";
-                $("#itemContent").empty();
-                $("#itemContent").append(htmlTemp);
-              }
-            });
-
-          default:
-            break;
+          let htmlTemp = `<iframe class="mx-4" src="${link}" width="${width}" height="${height}">`;
+          $("#itemContent").empty();
+          $("#itemContent").append(htmlTemp);
+        } else if (["Beauty"].includes(board)) {
+          let queryUrl = `/pttCrawler/targetImgs?url=${link}`;
+          axios.get(queryUrl).then((res) => {
+            console.log(res);
+            let target = res.data.data || [];
+            if (target.length > 0) {
+              let htmlTemp = "<ul id='images'>";
+              target.forEach((img, index) => {
+                htmlTemp += `<li class="inline-block w-1/2"><img id=${
+                  "img" + index
+                } onclick='handleView(${index})' class="object-contain" src="${img}" alt="Picture ${index}"></li>`;
+              });
+              htmlTemp += "</ul>";
+              $("#itemContent").empty();
+              $("#itemContent").append(htmlTemp);
+            } else {
+              let htmlTemp = "<p>無圖片</p>";
+              $("#itemContent").empty();
+              $("#itemContent").append(htmlTemp);
+            }
+          });
         }
       }
 

@@ -56,7 +56,7 @@ const getCurPage = (board) => {
     const backBtnHref = $('a[class="btn wide"]').eq(1).attr("href");
     let curPageNum =
       parseInt(
-        backBtnHref.replace(`/bbs/${board}/index`, "").replace(".html", "")
+        backBtnHref?.replace(`/bbs/${board}/index`, "")?.replace(".html", "")
       ) + 1;
     resolv(curPageNum);
   });

@@ -55,11 +55,34 @@ async function handleMsgReply(event) {
   if (event.message.text.includes("火車")) {
     let strArr = event.message.text.split(" ");
     if (strArr[1] && strArr[2]) {
-      queryFromToStation(strArr[1], strArr[2]).then((str) => {
-        return client.replyMessage(event.replyToken, {
-          type: "text",
-          text: str,
-        });
+      let result = await queryFromToStation(strArr[1], strArr[2]);
+      let length = 2;
+      let replyStr = "";
+      if (result.length > 0) {
+        replyStr += "最近幾班車次:";
+        for (let i = 0; i < length; i++) {
+          let TrainInfo = result[i].TrainInfo;
+          let StopTimes = result[i].StopTimes;
+          replyStr +=
+            TrainInfo.TrainTypeName.Zh_tw +
+            TrainInfo.TrainNo +
+            " " +
+            strArr[1] +
+            "開車時間:" +
+            StopTimes[0].ArrivalTime +
+            "，抵達" +
+            strArr[2] +
+            ":" +
+            StopTimes[StopTimes.length - 1].ArrivalTime +
+            ";";
+        }
+      } else {
+        replyStr += "沒車睡公園了!";
+      }
+
+      return client.replyMessage(event.replyToken, {
+        type: "text",
+        text: replyStr,
       });
     } else {
       return client.replyMessage(event.replyToken, {
@@ -69,51 +92,49 @@ async function handleMsgReply(event) {
     }
   }
 
-  if (!event.message.text.includes("火車")) {
-    const profile = (await client.getProfile(event.source.userId)) || {};
-    const name = profile.displayName;
-    if (!nameCache.includes(name)) {
-      nameCache.push(name);
-      replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
+  const profile = (await client.getProfile(event.source.userId)) || {};
+  const name = profile.displayName;
+  if (!nameCache.includes(name)) {
+    nameCache.push(name);
+    replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
+    replyImg = {
+      type: "image",
+      originalContentUrl: herokuURL + "/images/dopee0 ",
+      previewImageUrl: herokuURL + "/images/dopee0 ",
+    };
+
+    recordCache[name] = [...replyTemplate];
+  } else {
+    if (event.message.text && event.message.text.includes("豆皮")) {
+      let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {
         type: "image",
-        originalContentUrl: herokuURL + "/images/dopee0 ",
-        previewImageUrl: herokuURL + "/images/dopee0 ",
+        originalContentUrl: imgURL,
+        previewImageUrl: imgURL,
       };
-
-      recordCache[name] = [...replyTemplate];
+    }
+    if (recordCache[name].length > 0) {
+      let rMsgIndex = getRandom(0, recordCache[name].length - 1);
+      replyMsg += `${recordCache[name][rMsgIndex]}`;
+      recordCache[name].splice(rMsgIndex, 1);
+      console.log(recordCache[name]);
     } else {
-      if (event.message.text && event.message.text.includes("豆皮")) {
-        let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
-        replyImg = {
-          type: "image",
-          originalContentUrl: imgURL,
-          previewImageUrl: imgURL,
-        };
-      }
-      if (recordCache[name].length > 0) {
-        let rMsgIndex = getRandom(0, recordCache[name].length - 1);
-        replyMsg += `${recordCache[name][rMsgIndex]}`;
-        recordCache[name].splice(rMsgIndex, 1);
-        console.log(recordCache[name]);
-      } else {
-        replyMsg += "今日已無話可說^.^";
-      }
+      replyMsg += "今日已無話可說^.^";
     }
-    if (event.message.text) {
-      let doc = new linebotModel({
-        name: profile.displayName,
-        msg: event.message.text,
-      });
-      await doc.save();
-    }
-
-    const echo = replyImg
-      ? [{ type: "text", text: replyMsg }, replyImg]
-      : { type: "text", text: replyMsg };
-
-    return client.replyMessage(event.replyToken, echo);
   }
+  if (event.message.text) {
+    let doc = new linebotModel({
+      name: profile.displayName,
+      msg: event.message.text,
+    });
+    await doc.save();
+  }
+
+  const echo = replyImg
+    ? [{ type: "text", text: replyMsg }, replyImg]
+    : { type: "text", text: replyMsg };
+
+  return client.replyMessage(event.replyToken, echo);
 }
 
 module.exports.getTodayMsg = async (req, res) => {

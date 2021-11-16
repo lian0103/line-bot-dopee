@@ -117,7 +117,7 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
               ";";
           }
         }
-        console.log("???"+replyStr);
+        console.log("????"+replyStr);
 
         resolv(resultFilter);
       });

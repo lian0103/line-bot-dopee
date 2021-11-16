@@ -101,8 +101,8 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
         if (resultFilter.length > 0) {
           replyStr += "最近幾班車次:";
           for (let i = 0; i < length; i++) {
-            let TrainInfo = resultFilter[i].TrainInfo;
-            let StopTimes = resultFilter[i].StopTimes;
+            let TrainInfo = {...resultFilter[i].TrainInfo};
+            let StopTimes = [...resultFilter[i].StopTimes];
             replyStr +=
               TrainInfo.TrainTypeName.Zh_tw +
               TrainInfo.TrainNo +

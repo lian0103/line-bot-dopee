@@ -91,14 +91,15 @@ async function handleMsgReply(event) {
           replyStr += "沒車睡公園了!";
         }
       } else {
-        replyMsg += "查詢火車時刻格式:火車 {起站} {終點站}";
+        replyStr += "查詢火車時刻格式:火車 {起站} {終點站}";
       }
 
       return client.replyMessage(event.replyToken, {
         type: "text",
-        text: replyMsg,
+        text: replyStr,
       });
     }
+    
     if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {

@@ -87,7 +87,7 @@ async function handleMsgReply(event) {
     } else {
       return client.replyMessage(event.replyToken, {
         type: "text",
-        text: "查詢火車時刻格式:火車 {起站} {終點站} ex:火車 鶯歌 台北",
+        text: "查詢火車時刻格式:火車 {起站} {終點站}",
       });
     }
   }

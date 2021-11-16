@@ -2,6 +2,7 @@ const request = require("request");
 const line = require("@line/bot-sdk");
 const linebotModel = require("../models/linebotModel");
 const msgBrocastModel = require("../models/msgBrocastModel");
+const { queryFromToStation } = require("../services/trainCheck");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
@@ -63,6 +64,37 @@ async function handleMsgReply(event) {
 
     recordCache[name] = [...replyTemplate];
   } else {
+    if (event.message.text.includes("火車")) {
+      let strArr = event.message.text.split(" ");
+      if (strArr[1] && strArr[2]) {
+        let result = await queryFromToStation(strArr[1], strArr[2]);
+        let replyStr = "";
+        if (result.length > 0) {
+          replyStr += "最近幾班車次:";
+          result.slice(2).forEach((info) => {
+            let TrainInfo = info.TrainInfo;
+            let StopTimes = info.StopTimes;
+            replyStr +=
+              TrainInfo.TrainNo +
+              " " +
+              TrainInfo.TrainTypeName.Zh_tw +
+              " 開車時間:" +
+              StopTimes[0].ArrivalTime +
+              " 抵達" +
+              strArr[2] +
+              " " +
+              StopTimes[StopTimes.length - 1].ArrivalTime + ";";    
+          });
+
+          replyMsg = replyStr;
+
+        }else{
+          replyStr += "沒車睡公園了!"
+        }
+      }else{
+        replyMsg += "查詢火車時刻格式:火車 {起站} {終點站}";
+      }
+    }
     if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {

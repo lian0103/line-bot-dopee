@@ -27,6 +27,8 @@ app.use(require("./routes/imgRoute"));
 app.use(require("./routes/lineBotCallback"));
 app.use([express.json(), require("./routes/msgRoute")]);
 
+app.use(require("./routes/trainRoute"));
+
 app.use(require("./routes/defaultRoute")); //必須擺最後
 
 mongoDB.connect();

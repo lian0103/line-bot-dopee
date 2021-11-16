@@ -54,10 +54,11 @@ const getCurPage = (board) => {
     const content = await getPageContent(nameMapUrl[board]);
     const $ = cheerio.load(content);
     const backBtnHref = $('a[class="btn wide"]').eq(1).attr("href");
-    let curPageNum =
-      parseInt(
-        backBtnHref?.replace(`/bbs/${board}/index`, "")?.replace(".html", "")
-      ) + 1;
+    let curPageNum = backBtnHref
+      ? parseInt(
+          backBtnHref.replace(`/bbs/${board}/index`, "").replace(".html", "")
+        ) + 1
+      : 0;
     resolv(curPageNum);
   });
 };

@@ -57,13 +57,14 @@ async function handleMsgReply(event) {
     if (strArr[1] && strArr[2]) {
       trainReplyStr = await queryFromToStation(strArr[1], strArr[2]);
     } else {
-      trainReplyStr += "查詢火車時刻格式:火車 {起站} {終點站}";
+      trainReplyStr += "查詢火車時刻格式:火車 {起站} {終點站} ex:火車 鶯歌 台北";
     }
 
     return client.replyMessage(event.replyToken, {
       type: "text",
-      text: trainReplyStr || "err!?",
+      text: trainReplyStr,
     });
+    console.log("Here!?")
   }
 
   const profile = (await client.getProfile(event.source.userId)) || {};

@@ -52,68 +52,69 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
     from = from == "台北" ? "臺北" : from;
     to = to == "台北" ? "臺北" : to;
     console.log(from, to);
-    let stationInfoList = await queryAllSationInfo();
-    let TrainDate = today
-      ? moment().format("YYYY-MM-DD")
-      : moment(today).format("YYYY-MM-DD");
-    let fromId = stationInfoList.filter((obj) => obj.Zh_tw == from)[0]
-      ? stationInfoList.filter((obj) => obj.Zh_tw == from)[0].StationID
-      : null;
-    let toId = stationInfoList.filter((obj) => obj.Zh_tw == to)[0]
-      ? stationInfoList.filter((obj) => obj.Zh_tw == to)[0].StationID
-      : null;
-    if (!fromId || !toId) {
-      console.log("in~~?車站站名有誤");
-      return "車站站名有誤";
-    }
-
-    let url =
-      domain +
-      `/v3/Rail/TRA/DailyTrainTimetable/OD/Inclusive/${fromId}/to/${toId}/${TrainDate}`;
-    let options = {
-      url,
-      headers: getAuthorizationHeader(),
-    };
-    request.get(options, (err, res, body) => {
-      if (err) {
-        console.error(err);
+    queryAllSationInfo().then((stationInfoList) => {
+      let TrainDate = today
+        ? moment().format("YYYY-MM-DD")
+        : moment(today).format("YYYY-MM-DD");
+      let fromId = stationInfoList.filter((obj) => obj.Zh_tw == from)[0]
+        ? stationInfoList.filter((obj) => obj.Zh_tw == from)[0].StationID
+        : null;
+      let toId = stationInfoList.filter((obj) => obj.Zh_tw == to)[0]
+        ? stationInfoList.filter((obj) => obj.Zh_tw == to)[0].StationID
+        : null;
+      if (!fromId || !toId) {
+        console.log("in~~?車站站名有誤");
+        return "車站站名有誤";
       }
-      let result = JSON.parse(res.body);
-      console.log(result.TrainTimetables.length);
-      result = result.TrainTimetables.filter((obj) => {
-        let isAfter = moment(
-          TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
-        ).isAfter();
-        // console.log(isAfter);
-        return isAfter;
-      });
-      console.log(result.length);
 
-      let strArr = ["", from, to];
-      let replyStr = "";
-      if (result.length > 0) {
-        replyStr += "最近幾班車次:";
-        result.slice(0, 3).forEach((info) => {
-          let TrainInfo = info.TrainInfo;
-          let StopTimes = info.StopTimes;
-          replyStr +=
-            TrainInfo.TrainTypeName.Zh_tw +
-            TrainInfo.TrainNo +
-            " " +
-            strArr[1] +
-            "開車時間:" +
-            StopTimes[0].ArrivalTime +
-            "，抵達" +
-            strArr[2] +
-            ":" +
-            StopTimes[StopTimes.length - 1].ArrivalTime +
-            ";";
+      let url =
+        domain +
+        `/v3/Rail/TRA/DailyTrainTimetable/OD/Inclusive/${fromId}/to/${toId}/${TrainDate}`;
+      let options = {
+        url,
+        headers: getAuthorizationHeader(),
+      };
+      request.get(options, (err, res, body) => {
+        if (err) {
+          console.error(err);
+        }
+        let result = JSON.parse(res.body);
+        console.log(result.TrainTimetables.length);
+        result = result.TrainTimetables.filter((obj) => {
+          let isAfter = moment(
+            TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
+          ).isAfter();
+          // console.log(isAfter);
+          return isAfter;
         });
-      } else {
-        replyStr += "沒車睡公園了!";
-      }
+        console.log(result.length);
 
-      resolv(replyStr);
+        let strArr = ["", from, to];
+        let replyStr = "";
+        if (result.length > 0) {
+          replyStr += "最近幾班車次:";
+          result.slice(0, 3).forEach((info) => {
+            let TrainInfo = info.TrainInfo;
+            let StopTimes = info.StopTimes;
+            replyStr +=
+              TrainInfo.TrainTypeName.Zh_tw +
+              TrainInfo.TrainNo +
+              " " +
+              strArr[1] +
+              "開車時間:" +
+              StopTimes[0].ArrivalTime +
+              "，抵達" +
+              strArr[2] +
+              ":" +
+              StopTimes[StopTimes.length - 1].ArrivalTime +
+              ";";
+          });
+        } else {
+          replyStr += "沒車睡公園了!";
+        }
+
+        resolv(replyStr);
+      });
     });
   }).catch((err) => {
     console.log(err);

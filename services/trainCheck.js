@@ -78,22 +78,21 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
         console.error(err);
       }
       let result = JSON.parse(res.body);
-      // console.log(result);
+      console.log(result.TrainTimetables.length);
       result = result.TrainTimetables.filter((obj) => {
-        console.log(
-          moment(TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00")
-        );
         let isAfter = moment(
           TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
         ).isAfter();
+        // console.log(isAfter);
         return isAfter;
       });
+      console.log(result.length);
       resolv(result);
     });
   });
 };
 
-// queryFromToStation();
+queryFromToStation("桃園", "鶯歌");
 
 module.exports = {
   queryFromToStation,

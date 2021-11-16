@@ -53,7 +53,7 @@ async function handleMsgReply(event) {
 
   const profile = (await client.getProfile(event.source.userId)) || {};
   const name = profile.displayName;
-  if (!nameCache.includes(name)) {
+  if (!nameCache.includes(name) && !event.message.text.includes("火車")) {
     nameCache.push(name);
     replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
     replyImg = {
@@ -71,7 +71,7 @@ async function handleMsgReply(event) {
         let replyStr = "";
         if (result.length > 0) {
           replyStr += "最近幾班車次:";
-          result.slice(2).forEach((info) => {
+          result.slice(0, 2).forEach((info) => {
             let TrainInfo = info.TrainInfo;
             let StopTimes = info.StopTimes;
             replyStr +=
@@ -83,17 +83,22 @@ async function handleMsgReply(event) {
               " 抵達" +
               strArr[2] +
               " " +
-              StopTimes[StopTimes.length - 1].ArrivalTime + ";";    
+              StopTimes[StopTimes.length - 1].ArrivalTime +
+              ";";
           });
 
           replyMsg = replyStr;
-
-        }else{
-          replyStr += "沒車睡公園了!"
+        } else {
+          replyStr += "沒車睡公園了!";
         }
-      }else{
+      } else {
         replyMsg += "查詢火車時刻格式:火車 {起站} {終點站}";
       }
+
+      return client.replyMessage(event.replyToken, {
+        type: "text",
+        text: replyMsg,
+      });
     }
     if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;

@@ -80,17 +80,41 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
         }
         let result = JSON.parse(res.body);
         console.log(result.TrainTimetables.length);
-        result = result.TrainTimetables.filter((obj,index) => {
+        let resultFilter = result.TrainTimetables.filter((obj, index) => {
           let isAfter = moment(
             TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
           ).isAfter(moment(new Date()));
-          console.log(index,isAfter);
+          console.log(typeof isAfter);
+          console.log(index, isAfter);
           return isAfter;
         });
-        console.log(result.length);
+        console.log(resultFilter.length);
+        let strArr = ["", from, to];
 
+        let length = 2;
+        let replyStr = "";
+        if (resultFilter.length > 0) {
+          replyStr += "最近幾班車次:";
+          for (let i = 0; i < length; i++) {
+            let TrainInfo = resultFilter[i].TrainInfo;
+            let StopTimes = resultFilter[i].StopTimes;
+            replyStr +=
+              TrainInfo.TrainTypeName.Zh_tw +
+              TrainInfo.TrainNo +
+              " " +
+              strArr[1] +
+              "開車時間:" +
+              StopTimes[0].ArrivalTime +
+              "，抵達" +
+              strArr[2] +
+              ":" +
+              StopTimes[StopTimes.length - 1].ArrivalTime +
+              ";";
+          }
+        }
+        console.log(replyStr);
 
-        resolv(result);
+        resolv(resultFilter);
       });
     });
   }).catch((err) => {

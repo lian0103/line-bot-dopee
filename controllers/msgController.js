@@ -55,61 +55,62 @@ async function handleMsgReply(event) {
   if (event.message.text.includes("火車")) {
     let strArr = event.message.text.split(" ");
     if (strArr[1] && strArr[2]) {
-      trainReplyStr = await queryFromToStation(strArr[1], strArr[2]);
+      queryFromToStation(strArr[1], strArr[2]).then((str) => {
+        return client.replyMessage(event.replyToken, {
+          type: "text",
+          text: str,
+        });
+      });
     } else {
-      trainReplyStr += "查詢火車時刻格式:火車 {起站} {終點站} ex:火車 鶯歌 台北";
+      replyMsg += "查詢火車時刻格式:火車 {起站} {終點站} ex:火車 鶯歌 台北";
     }
-
-    return client.replyMessage(event.replyToken, {
-      type: "text",
-      text: trainReplyStr,
-    });
-    console.log("Here!?")
   }
 
-  const profile = (await client.getProfile(event.source.userId)) || {};
-  const name = profile.displayName;
-  if (!nameCache.includes(name)) {
-    nameCache.push(name);
-    replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
-    replyImg = {
-      type: "image",
-      originalContentUrl: herokuURL + "/images/dopee0 ",
-      previewImageUrl: herokuURL + "/images/dopee0 ",
-    };
-
-    recordCache[name] = [...replyTemplate];
-  } else {
-    if (event.message.text && event.message.text.includes("豆皮")) {
-      let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+  if (!event.message.text.includes("火車")) {
+    const profile = (await client.getProfile(event.source.userId)) || {};
+    const name = profile.displayName;
+    if (!nameCache.includes(name)) {
+      nameCache.push(name);
+      replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
       replyImg = {
         type: "image",
-        originalContentUrl: imgURL,
-        previewImageUrl: imgURL,
+        originalContentUrl: herokuURL + "/images/dopee0 ",
+        previewImageUrl: herokuURL + "/images/dopee0 ",
       };
-    }
-    if (recordCache[name].length > 0) {
-      let rMsgIndex = getRandom(0, recordCache[name].length - 1);
-      replyMsg += `${recordCache[name][rMsgIndex]}`;
-      recordCache[name].splice(rMsgIndex, 1);
-      console.log(recordCache[name]);
+
+      recordCache[name] = [...replyTemplate];
     } else {
-      replyMsg += "今日已無話可說^.^";
+      if (event.message.text && event.message.text.includes("豆皮")) {
+        let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+        replyImg = {
+          type: "image",
+          originalContentUrl: imgURL,
+          previewImageUrl: imgURL,
+        };
+      }
+      if (recordCache[name].length > 0) {
+        let rMsgIndex = getRandom(0, recordCache[name].length - 1);
+        replyMsg += `${recordCache[name][rMsgIndex]}`;
+        recordCache[name].splice(rMsgIndex, 1);
+        console.log(recordCache[name]);
+      } else {
+        replyMsg += "今日已無話可說^.^";
+      }
     }
-  }
-  if (event.message.text) {
-    let doc = new linebotModel({
-      name: profile.displayName,
-      msg: event.message.text,
-    });
-    await doc.save();
-  }
+    if (event.message.text) {
+      let doc = new linebotModel({
+        name: profile.displayName,
+        msg: event.message.text,
+      });
+      await doc.save();
+    }
 
-  const echo = replyImg
-    ? [{ type: "text", text: replyMsg }, replyImg]
-    : { type: "text", text: replyMsg };
+    const echo = replyImg
+      ? [{ type: "text", text: replyMsg }, replyImg]
+      : { type: "text", text: replyMsg };
 
-  return client.replyMessage(event.replyToken, echo);
+    return client.replyMessage(event.replyToken, echo);
+  }
 }
 
 module.exports.getTodayMsg = async (req, res) => {

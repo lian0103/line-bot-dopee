@@ -52,6 +52,7 @@ const queryAllSationInfo = () => {
 const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
   from = from == "台北" ? "臺北" : from;
   to = to == "台北" ? "臺北" : to;
+  console.log(from, to);
 
   return new Promise(async (resolv, reject) => {
     await queryAllSationInfo();
@@ -122,32 +123,10 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
 
 //service test
 // let test1 = "桃園";
-// let test2 = "臺北";
-// queryFromToStation(test1, test2).then((result) => {
-//   let strArr = ["", test1, test2];
-//   let replyStr = "";
-//   if (result.length > 0) {
-//     replyStr += "最近幾班車次:";
-//     result.slice(0, 3).forEach((info) => {
-//       let TrainInfo = info.TrainInfo;
-//       let StopTimes = info.StopTimes;
-//       replyStr +=
-//         TrainInfo.TrainTypeName.Zh_tw +
-//         TrainInfo.TrainNo +
-//         " " +
-//         strArr[1] +
-//         "開車時間:" +
-//         StopTimes[0].ArrivalTime +
-//         "，抵達" +
-//         strArr[2] +
-//         ":" +
-//         StopTimes[StopTimes.length - 1].ArrivalTime +
-//         ";";
-//     });
-//   } else {
-//     replyStr += "沒車睡公園了!";
-//   }
-//   console.log(replyStr);
+// let test2 = "新竹";
+// queryFromToStation(test1, test2).then((resulStr) => {
+
+//   console.log(resulStr);
 // });
 
 module.exports = {

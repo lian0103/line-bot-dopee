@@ -82,13 +82,14 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
         console.log(result.TrainTimetables.length);
         let resultFilter = [];
         result.TrainTimetables.forEach((obj, index) => {
-          let isAfter = moment(
+          let timeVal = Date.parse(
             TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
-          ).isAfter(moment(new Date()));
+          ).valueOf();
+          let curVal = Date.parse(new Date()).valueOf();
+          let isAfter = timeVal > curVal;
+          console.log(timeVal, curVal, isAfter);
 
           if (isAfter && resultFilter.length < 3) {
-            console.log(typeof isAfter);
-            console.log(index, isAfter);
             resultFilter.push(obj);
           }
         });
@@ -101,7 +102,7 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
         if (resultFilter.length > 0) {
           replyStr += "最近幾班車次:";
           for (let i = 0; i < length; i++) {
-            let TrainInfo = {...resultFilter[i].TrainInfo};
+            let TrainInfo = { ...resultFilter[i].TrainInfo };
             let StopTimes = [...resultFilter[i].StopTimes];
             replyStr +=
               TrainInfo.TrainTypeName.Zh_tw +
@@ -117,7 +118,6 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
               ";";
           }
         }
-        console.log("????"+replyStr);
 
         resolv(resultFilter);
       });

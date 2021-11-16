@@ -75,19 +75,18 @@ async function handleMsgReply(event) {
             let TrainInfo = info.TrainInfo;
             let StopTimes = info.StopTimes;
             replyStr +=
+              TrainInfo.TrainTypeName.Zh_tw +
               TrainInfo.TrainNo +
               " " +
-              TrainInfo.TrainTypeName.Zh_tw +
-              " 開車時間:" +
+              strArr[1] +
+              "開車時間:" +
               StopTimes[0].ArrivalTime +
-              " 抵達" +
+              "，抵達" +
               strArr[2] +
-              " " +
+              ":" +
               StopTimes[StopTimes.length - 1].ArrivalTime +
               ";";
           });
-
-          replyMsg = replyStr;
         } else {
           replyStr += "沒車睡公園了!";
         }

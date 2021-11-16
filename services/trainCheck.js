@@ -24,8 +24,6 @@ const getAuthorizationHeader = function () {
   return { Authorization: Authorization, "X-Date": GMTString };
 };
 
-var stationInfoList = null;
-
 const queryAllSationInfo = () => {
   return new Promise((resolv, reject) => {
     let url = domain + "/v3/Rail/TRA/Station?$format=JSON";
@@ -37,25 +35,24 @@ const queryAllSationInfo = () => {
       if (err) {
         console.error(err);
       }
-      stationInfoList = JSON.parse(res.body).Stations.map((obj) => {
+      let stationInfoList = JSON.parse(res.body).Stations.map((obj) => {
         return {
           ...obj,
           ...obj.StationName,
         };
       });
       // console.log(stationInfoList);
-      resolv(true);
+      resolv(stationInfoList);
     });
   });
 };
 
 const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
-  from = from == "台北" ? "臺北" : from;
-  to = to == "台北" ? "臺北" : to;
-  console.log(from, to);
-
   return new Promise(async (resolv, reject) => {
-    await queryAllSationInfo();
+    from = from == "台北" ? "臺北" : from;
+    to = to == "台北" ? "臺北" : to;
+    console.log(from, to);
+    let stationInfoList = await queryAllSationInfo();
     let TrainDate = today
       ? moment().format("YYYY-MM-DD")
       : moment(today).format("YYYY-MM-DD");
@@ -118,16 +115,17 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
 
       resolv(replyStr);
     });
+  }).catch((err) => {
+    console.log(err);
   });
 };
 
 //service test
-// let test1 = "桃園";
-// let test2 = "新竹";
-// queryFromToStation(test1, test2).then((resulStr) => {
-
-//   console.log(resulStr);
-// });
+let test1 = "桃園";
+let test2 = "台北";
+queryFromToStation(test1, test2).then((resulStr) => {
+  console.log(resulStr);
+});
 
 module.exports = {
   queryFromToStation,

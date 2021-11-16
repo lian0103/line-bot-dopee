@@ -55,28 +55,7 @@ async function handleMsgReply(event) {
   if (event.message.text.includes("火車")) {
     let strArr = event.message.text.split(" ");
     if (strArr[1] && strArr[2]) {
-      let result = await queryFromToStation(strArr[1], strArr[2]);
-      if (result.length > 0) {
-        trainReplyStr += "最近幾班車次:";
-        result.slice(0, 3).forEach((info) => {
-          let TrainInfo = info.TrainInfo;
-          let StopTimes = info.StopTimes;
-          trainReplyStr +=
-            TrainInfo.TrainTypeName.Zh_tw +
-            TrainInfo.TrainNo +
-            " " +
-            strArr[1] +
-            "開車時間:" +
-            StopTimes[0].ArrivalTime +
-            "，抵達" +
-            strArr[2] +
-            ":" +
-            StopTimes[StopTimes.length - 1].ArrivalTime +
-            ";";
-        });
-      } else {
-        trainReplyStr += "沒車睡公園了!";
-      }
+      trainReplyStr = await queryFromToStation(strArr[1], strArr[2]);
     } else {
       trainReplyStr += "查詢火車時刻格式:火車 {起站} {終點站}";
     }

@@ -1,3 +1,7 @@
+//on heroku server need these buildpack:
+//https://github.com/jontewks/puppeteer-heroku-buildpack
+//https://github.com/CoffeeAndCode/puppeteer-heroku-buildpack
+
 const request = require("request");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");

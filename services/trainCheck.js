@@ -47,7 +47,7 @@ const queryAllSationInfo = () => {
   });
 };
 
-const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
+const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
   return new Promise(async (resolv, reject) => {
     from = from == "台北" ? "臺北" : from;
     to = to == "台北" ? "臺北" : to;
@@ -80,14 +80,19 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
         }
         let result = JSON.parse(res.body);
         console.log(result.TrainTimetables.length);
-        let resultFilter = result.TrainTimetables.filter((obj, index) => {
+        let resultFilter = [];
+        result.TrainTimetables.forEach((obj, index) => {
           let isAfter = moment(
             TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
           ).isAfter(moment(new Date()));
-          console.log(typeof isAfter);
-          console.log(index, isAfter);
-          return isAfter;
+
+          if (isAfter && resultFilter.length < 3) {
+            console.log(typeof isAfter);
+            console.log(index, isAfter);
+            resultFilter.push(obj);
+          }
         });
+
         console.log(resultFilter.length);
         let strArr = ["", from, to];
 

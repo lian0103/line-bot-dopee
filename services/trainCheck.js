@@ -93,30 +93,32 @@ const queryFromToStation = (from = "鶯歌", to = "臺北", today = true) => {
 };
 
 //service test
-// queryFromToStation("中壢", "鶯歌").then((result) => {
-//   let strArr = ["", "中壢", "鶯歌"];
-//   let replyStr = "";
-//   if (result.length > 0) {
-//     replyStr += "最近幾班車次:";
-//     result.slice(0, 2).forEach((info) => {
-//       let TrainInfo = info.TrainInfo;
-//       let StopTimes = info.StopTimes;
-//       replyStr +=
-//         TrainInfo.TrainTypeName.Zh_tw +
-//         TrainInfo.TrainNo +
-//         " " +
-//         strArr[1] +
-//         "開車時間:" +
-//         StopTimes[0].ArrivalTime +
-//         "，抵達" +
-//         strArr[2] +
-//         ":" +
-//         StopTimes[StopTimes.length - 1].ArrivalTime +
-//         ";";
-//     });
-//   }
-//   console.log(replyStr);
-// });
+queryFromToStation("中壢", "鶯歌").then((result) => {
+  let strArr = ["", "中壢", "鶯歌"];
+  let replyStr = "";
+  if (result.length > 0) {
+    replyStr += "最近幾班車次:";
+    result.slice(0, 3).forEach((info) => {
+      let TrainInfo = info.TrainInfo;
+      let StopTimes = info.StopTimes;
+      replyStr +=
+        TrainInfo.TrainTypeName.Zh_tw +
+        TrainInfo.TrainNo +
+        " " +
+        strArr[1] +
+        "開車時間:" +
+        StopTimes[0].ArrivalTime +
+        "，抵達" +
+        strArr[2] +
+        ":" +
+        StopTimes[StopTimes.length - 1].ArrivalTime +
+        ";";
+    });
+  } else {
+    replyStr += "沒車睡公園了!";
+  }
+  console.log(replyStr);
+});
 
 module.exports = {
   queryFromToStation,

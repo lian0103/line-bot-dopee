@@ -33,6 +33,7 @@ function getRandom(min, max) {
 
 // event handler
 async function handleMsgReply(event) {
+  let trainReplyStr = "";
   let replyMsg = "";
   let replyImg = null;
   console.log(event);
@@ -51,9 +52,44 @@ async function handleMsgReply(event) {
     });
   }
 
+  if (event.message.text.includes("火車")) {
+    let strArr = event.message.text.split(" ");
+    if (strArr[1] && strArr[2]) {
+      let result = await queryFromToStation(strArr[1], strArr[2]);
+      if (result.length > 0) {
+        trainReplyStr += "最近幾班車次:";
+        result.slice(0, 3).forEach((info) => {
+          let TrainInfo = info.TrainInfo;
+          let StopTimes = info.StopTimes;
+          trainReplyStr +=
+            TrainInfo.TrainTypeName.Zh_tw +
+            TrainInfo.TrainNo +
+            " " +
+            strArr[1] +
+            "開車時間:" +
+            StopTimes[0].ArrivalTime +
+            "，抵達" +
+            strArr[2] +
+            ":" +
+            StopTimes[StopTimes.length - 1].ArrivalTime +
+            ";";
+        });
+      } else {
+        trainReplyStr += "沒車睡公園了!";
+      }
+    } else {
+      trainReplyStr += "查詢火車時刻格式:火車 {起站} {終點站}";
+    }
+
+    return client.replyMessage(event.replyToken, {
+      type: "text",
+      text: trainReplyStr || "err!?",
+    });
+  }
+
   const profile = (await client.getProfile(event.source.userId)) || {};
   const name = profile.displayName;
-  if (!nameCache.includes(name) && !event.message.text.includes("火車")) {
+  if (!nameCache.includes(name)) {
     nameCache.push(name);
     replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
     replyImg = {
@@ -64,42 +100,6 @@ async function handleMsgReply(event) {
 
     recordCache[name] = [...replyTemplate];
   } else {
-    if (event.message.text.includes("火車")) {
-      let strArr = event.message.text.split(" ");
-      if (strArr[1] && strArr[2]) {
-        let result = await queryFromToStation(strArr[1], strArr[2]);
-        let replyStr = "";
-        if (result.length > 0) {
-          replyStr += "最近幾班車次:";
-          result.slice(0, 2).forEach((info) => {
-            let TrainInfo = info.TrainInfo;
-            let StopTimes = info.StopTimes;
-            replyStr +=
-              TrainInfo.TrainTypeName.Zh_tw +
-              TrainInfo.TrainNo +
-              " " +
-              strArr[1] +
-              "開車時間:" +
-              StopTimes[0].ArrivalTime +
-              "，抵達" +
-              strArr[2] +
-              ":" +
-              StopTimes[StopTimes.length - 1].ArrivalTime +
-              ";";
-          });
-        } else {
-          replyStr += "沒車睡公園了!";
-        }
-      } else {
-        replyStr += "查詢火車時刻格式:火車 {起站} {終點站}";
-      }
-
-      return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: replyStr,
-      });
-    }
-    
     if (event.message.text && event.message.text.includes("豆皮")) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {

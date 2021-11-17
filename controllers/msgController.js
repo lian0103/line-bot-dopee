@@ -58,16 +58,18 @@ async function handleMsgReply(event) {
       let length = 3;
       let replyStr = "";
       if (resultFilter.length > 0) {
-        replyStr += `最近幾班車次:
-          `;
+        replyStr += "最近幾班車次:%0D%0A";
         for (let i = 0; i < length; i++) {
           let TrainInfo = resultFilter[i].TrainInfo;
           let StopTimes = resultFilter[i].StopTimes;
-          replyStr += `${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo} ${strArr[1]}開車時間:${StopTimes[0].ArrivalTime}，抵達${strArr[2]}時間:${StopTimes[StopTimes.length - 1].ArrivalTime};`;
-          replyStr += `
-          `;
+          replyStr += `${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo} ${
+            strArr[1]
+          }開車時間:${StopTimes[0].ArrivalTime}，抵達${strArr[2]}時間:${
+            StopTimes[StopTimes.length - 1].ArrivalTime
+          };`;
+          replyStr += "%0D%0A";
         }
-      }else {
+      } else {
         replyStr += "沒車睡公園了!";
       }
 

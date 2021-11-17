@@ -94,7 +94,7 @@ async function handleMsgReply(event) {
     let strArr = event.message.text.split(" ");
     if (strArr[1]) {
       let resultFilter = await getActivitiesByDistrict(strArr[1]);
-      let length = 3;
+      let length = 2;
       let replyArr = [];
       let replyStr = "";
 

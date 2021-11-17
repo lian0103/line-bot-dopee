@@ -55,16 +55,16 @@ async function handleMsgReply(event) {
     let strArr = event.message.text.split(" ");
     if (strArr[1] && strArr[2]) {
       let resultFilter = await queryFromToStation(strArr[1], strArr[2]);
-      let length = 2;
+      let length = 3;
       let replyStr = "";
       if (resultFilter.length > 0) {
-        replyStr += "最近幾班車次:";
+        replyStr += `最近幾班車次:
+          `;
         for (let i = 0; i < length; i++) {
           let TrainInfo = resultFilter[i].TrainInfo;
           let StopTimes = resultFilter[i].StopTimes;
+          replyStr += `${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo} ${strArr[1]}開車時間:${StopTimes[0].ArrivalTime}，抵達${strArr[2]}時間:${StopTimes[StopTimes.length - 1].ArrivalTime};`;
           replyStr += `
-            ${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo}
-            ${strArr[1]}開車時間:${StopTimes[0].ArrivalTime}，抵達${strArr[2]}時間:${StopTimes[StopTimes.length - 1].ArrivalTime};
           `;
         }
       }else {

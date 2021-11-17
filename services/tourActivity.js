@@ -7,6 +7,7 @@ const districtNameAliasMap = {
   台中: "臺中",
   台東: "臺東",
   台南: "臺南",
+  馬祖: "連江"
 };
 
 const queryTourismActivity = () => {
@@ -21,11 +22,13 @@ const queryTourismActivity = () => {
         console.error(err);
       }
       let activities = JSON.parse(res.body);
-      //   console.log(activities[0]);
+        // console.log(activities);
       resolv(activities);
     });
   });
 };
+
+queryTourismActivity();
 
 const getActivitiesByDistrict = (districStr = "新北市") => {
   return new Promise(async (resolv, reject) => {

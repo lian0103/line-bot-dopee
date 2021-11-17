@@ -7,6 +7,7 @@ const { getActivitiesByDistrict } = require("../services/tourActivity");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
+const moment = require("moment");
 
 const replyTemplate = [
   "唉呦~",
@@ -105,7 +106,10 @@ async function handleMsgReply(event) {
           let replyStr = "";
           let actItem = resultFilter[i];
           replyStr += `${actItem.Name} 
-${actItem.Description};`;
+活動時間:${moment(actItem.StartTime).format("YYYY-MM-DD")}~${moment(
+            actItem.EndTime
+          ).format("YYYY-MM-DD")}
+${actItem.Description}${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""};`;
           replyStr += `
 `;
           replyArr.push({
@@ -126,7 +130,7 @@ ${actItem.Description};`;
         replyStr = resultFilter;
       }
 
-      return Array.isArray(replyArr)
+      return Array.isArray(replyArr) && resultFilter.length > 0
         ? client.replyMessage(event.replyToken, replyArr)
         : client.replyMessage(event.replyToken, {
             type: "text",

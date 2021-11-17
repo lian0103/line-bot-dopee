@@ -2,9 +2,16 @@ const request = require("request");
 const moment = require("moment");
 const { getAuthorizationHeader, domain } = require("./PTX_API_Config");
 
+const districtNameAliasMap = {
+  台北: "臺北",
+  台中: "臺中",
+  台東: "臺東",
+  台南: "臺南",
+};
+
 const queryTourismActivity = () => {
   return new Promise((resolv, reject) => {
-    let url = domain + "/v2/Tourism/Activity?$format=JSON"; 
+    let url = domain + "/v2/Tourism/Activity?$format=JSON";
     let options = {
       url,
       headers: getAuthorizationHeader(),
@@ -20,13 +27,11 @@ const queryTourismActivity = () => {
   });
 };
 
-// queryTourismActivity();
-const isAfter = (obj) => {
-  return moment(obj.EndTime).isAfter();
-};
-
 const getActivitiesByDistrict = (districStr = "新北市") => {
   return new Promise(async (resolv, reject) => {
+    districStr = districtNameAliasMap[districStr]
+      ? districtNameAliasMap[districStr]
+      : districStr;
     if (!districStr) {
       resolv(`輸入的${districStr}可能不是正確縣市名稱喔`);
     }

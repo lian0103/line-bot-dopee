@@ -96,6 +96,7 @@ async function handleMsgReply(event) {
       let resultFilter = await getActivitiesByDistrict(strArr[1]);
       let length = 3;
       let replyArr = [];
+      let replyStr = "";
 
       if (Array.isArray(resultFilter) && resultFilter.length > 0) {
         replyStr += `${strArr[1]}最近活動有:

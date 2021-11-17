@@ -4,7 +4,7 @@ const { getAuthorizationHeader, domain } = require("./PTX_API_Config");
 
 const queryTourismActivity = () => {
   return new Promise((resolv, reject) => {
-    let url = domain + "/v2/Tourism/Activity?$format=JSON";
+    let url = domain + "/v2/Tourism/Activity?$format=JSON"; 
     let options = {
       url,
       headers: getAuthorizationHeader(),

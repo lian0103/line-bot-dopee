@@ -50,10 +50,17 @@ const queryAllSationInfo = () => {
   });
 };
 
+const stationNameAliasMap = {
+  台北: "臺北",
+  台中: "臺中",
+  台東: "臺東",
+  台南:"臺南",
+};
+
 const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
   return new Promise(async (resolv, reject) => {
-    from = from == "台北" ? "臺北" : from;
-    to = to == "台北" ? "臺北" : to;
+    from = stationNameAliasMap[from] ? stationNameAliasMap[from] : from;
+    to = stationNameAliasMap[from] ? stationNameAliasMap[from] : to;
     console.log(from, to);
     queryAllSationInfo().then((stationInfoList) => {
       let TrainDate = today

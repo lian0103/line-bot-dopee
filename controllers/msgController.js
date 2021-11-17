@@ -54,31 +54,40 @@ async function handleMsgReply(event) {
   if (event.message.text.includes("火車")) {
     let strArr = event.message.text.split(" ");
     if (strArr[1] && strArr[2]) {
-      let resultFilter = await queryFromToStation(strArr[1], strArr[2]);
-      let length = 3;
-      let replyStr = "";
-      if (resultFilter.length > 0) {
-        replyStr += `最近幾班車次:
+      queryFromToStation(strArr[1], strArr[2])
+        .then((resultFilter) => {
+          let length = 3;
+          let replyStr = "";
+          if (resultFilter.length > 0) {
+            replyStr += `最近幾班車次:
 `;
-        for (let i = 0; i < length; i++) {
-          let TrainInfo = resultFilter[i].TrainInfo;
-          let StopTimes = resultFilter[i].StopTimes;
-          replyStr += `${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo} ${
-            strArr[1]
-          }開車時間:${StopTimes[0].ArrivalTime}，抵達${strArr[2]}時間:${
-            StopTimes[StopTimes.length - 1].ArrivalTime
-          };`;
-          replyStr += `
+            for (let i = 0; i < length; i++) {
+              let TrainInfo = resultFilter[i].TrainInfo;
+              let StopTimes = resultFilter[i].StopTimes;
+              replyStr += `${TrainInfo.TrainTypeName.Zh_tw} ${
+                TrainInfo.TrainNo
+              } ${strArr[1]}開車時間:${StopTimes[0].ArrivalTime}，抵達${
+                strArr[2]
+              }時間:${StopTimes[StopTimes.length - 1].ArrivalTime};`;
+              replyStr += `
 `;
-        }
-      } else {
-        replyStr += "沒車睡公園了!";
-      }
+            }
+          } else {
+            replyStr += "沒車睡公園了!";
+          }
 
-      return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: replyStr,
-      });
+          return client.replyMessage(event.replyToken, {
+            type: "text",
+            text: replyStr,
+          });
+        })
+        .catch((errStr) => {
+          console.log(errStr);
+          return client.replyMessage(event.replyToken, {
+            type: "text",
+            text: errStr,
+          });
+        });
     } else {
       return client.replyMessage(event.replyToken, {
         type: "text",

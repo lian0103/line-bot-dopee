@@ -67,7 +67,7 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
         : null;
       if (!fromId || !toId) {
         console.log("in~~?車站站名有誤");
-        return "車站站名有誤";
+        reject(`輸入的${from}或${to}的站名有誤喔`);
       }
 
       let url =

@@ -3,6 +3,7 @@ const line = require("@line/bot-sdk");
 const linebotModel = require("../models/linebotModel");
 const msgBrocastModel = require("../models/msgBrocastModel");
 const { queryFromToStation } = require("../services/trainCheck");
+const { getActivitiesByDistrict } = require("../services/tourActivity");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const herokuURL = "https://line-bot-doope.herokuapp.com";
@@ -85,6 +86,55 @@ async function handleMsgReply(event) {
       return client.replyMessage(event.replyToken, {
         type: "text",
         text: "查詢火車時刻格式:火車 {起站} {終點站}",
+      });
+    }
+  }
+
+  if (event.message.text.includes("活動")) {
+    let strArr = event.message.text.split(" ");
+    if (strArr[1]) {
+      let resultFilter = await getActivitiesByDistrict(strArr[1]);
+      let length = 3;
+      let replyArr = [];
+
+      if (Array.isArray(resultFilter) && resultFilter.length > 0) {
+        replyStr += `${strArr[1]}最近活動有:
+`;
+        for (let i = 0; i < length; i++) {
+          let replyStr = "";
+          let actItem = resultFilter[i];
+          replyStr += `${actItem.Name} 
+${actItem.Description};`;
+          replyStr += `
+`;
+          replyArr.push({
+            type: "text",
+            text: replyStr,
+          });
+          if (actItem.Picture.PictureUrl1) {
+            replyArr.push({
+              type: "image",
+              originalContentUrl: actItem.Picture.PictureUrl1,
+              previewImageUrl: actItem.Picture.PictureUrl1,
+            });
+          }
+        }
+      } else if (Array.isArray(resultFilter) && resultFilter.length == 0) {
+        replyStr = "查無活動 換個縣市~~!";
+      } else if (typeof resultFilter == "string") {
+        replyStr = resultFilter;
+      }
+
+      return Array.isArray(replyArr)
+        ? client.replyMessage(event.replyToken, replyArr)
+        : client.replyMessage(event.replyToken, {
+            type: "text",
+            text: replyStr,
+          });
+    } else {
+      return client.replyMessage(event.replyToken, {
+        type: "text",
+        text: "查詢縣市活動格式:活動 {縣市名稱}",
       });
     }
   }

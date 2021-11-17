@@ -103,6 +103,11 @@ async function handleMsgReply(event) {
         replyStr += `${strArr[1]}最近活動有:
 `;
         for (let i = 0; i < length; i++) {
+          if (!resultFilter[i]) {
+            console.log(resultFilter);
+            return false;
+          }
+
           let replyStr = "";
           let actItem = resultFilter[i];
           replyStr += `${actItem.Name} 

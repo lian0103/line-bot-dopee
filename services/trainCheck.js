@@ -66,8 +66,7 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
         ? stationInfoList.filter((obj) => obj.Zh_tw == to)[0].StationID
         : null;
       if (!fromId || !toId) {
-        console.log("in~~?車站站名有誤");
-        reject(`輸入的${from}或${to}的站名有誤喔`);
+        resolv(`輸入的${from}或${to}的站名有誤喔`);
       }
 
       let url =

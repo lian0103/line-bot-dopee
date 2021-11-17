@@ -54,13 +54,13 @@ const stationNameAliasMap = {
   台北: "臺北",
   台中: "臺中",
   台東: "臺東",
-  台南:"臺南",
+  台南: "臺南",
 };
 
 const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
   return new Promise(async (resolv, reject) => {
     from = stationNameAliasMap[from] ? stationNameAliasMap[from] : from;
-    to = stationNameAliasMap[from] ? stationNameAliasMap[from] : to;
+    to = stationNameAliasMap[to] ? stationNameAliasMap[to] : to;
     console.log(from, to);
     queryAllSationInfo().then((stationInfoList) => {
       let TrainDate = today

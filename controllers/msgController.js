@@ -95,14 +95,14 @@ async function handleMsgReply(event) {
     let strArr = event.message.text.split(" ");
     if (strArr[1]) {
       let resultFilter = await getActivitiesByDistrict(strArr[1]);
-      let length = 2;
+      resultFilter = resultFilter.slice(0,2);
       let replyArr = [];
       let replyStr = "";
 
       if (Array.isArray(resultFilter) && resultFilter.length > 0) {
         replyStr += `${strArr[1]}最近活動有:
 `;
-        for (let i = 0; i < length; i++) {
+        for (let i = 0; i < resultFilter.length; i++) {
           if (!resultFilter[i]) {
             console.log(resultFilter);
             return false;
@@ -114,7 +114,7 @@ async function handleMsgReply(event) {
 活動時間:${moment(actItem.StartTime).format("YYYY-MM-DD")}~${moment(
             actItem.EndTime
           ).format("YYYY-MM-DD")}
-${actItem.Description}${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""};`;
+${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""}`;
           replyStr += `
 `;
           replyArr.push({

@@ -5,7 +5,6 @@
   "main": "app.js",
   "dependencies": {
     "@line/bot-sdk": "^7.4.0",
-    "cheerio": "^1.0.0-rc.10",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -15,7 +14,6 @@
     "moment": "^2.29.1",
     "mongoose": "^6.0.9",
     "multer": "^1.4.3",
-    "puppeteer": "^11.0.0",
     "request": "^2.88.2",
     "streamifier": "^0.1.1",
     "swagger-jsdoc": "^6.1.0",

@@ -9,7 +9,7 @@ swaggerDefinition:
       get:
         tags:
           - 留言訊息
-        description: 撈今天收到的訊息
+        description: 撈收到的訊息
         responses:
           '200':
             description: A successful response

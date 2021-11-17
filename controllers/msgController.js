@@ -33,7 +33,6 @@ function getRandom(min, max) {
 
 // event handler
 async function handleMsgReply(event) {
-  let trainReplyStr = "";
   let replyMsg = "";
   let replyImg = null;
   console.log(event);
@@ -55,28 +54,20 @@ async function handleMsgReply(event) {
   if (event.message.text.includes("火車")) {
     let strArr = event.message.text.split(" ");
     if (strArr[1] && strArr[2]) {
-      let result = await queryFromToStation(strArr[1], strArr[2]);
+      let resultFilter = await queryFromToStation(strArr[1], strArr[2]);
       let length = 2;
       let replyStr = "";
-      if (result.length > 0) {
+      if (resultFilter.length > 0) {
         replyStr += "最近幾班車次:";
         for (let i = 0; i < length; i++) {
-          let TrainInfo = result[i].TrainInfo;
-          let StopTimes = result[i].StopTimes;
-          replyStr +=
-            TrainInfo.TrainTypeName.Zh_tw +
-            TrainInfo.TrainNo +
-            " " +
-            strArr[1] +
-            "開車時間:" +
-            StopTimes[0].ArrivalTime +
-            "，抵達" +
-            strArr[2] +
-            ":" +
-            StopTimes[StopTimes.length - 1].ArrivalTime +
-            ";";
+          let TrainInfo = resultFilter[i].TrainInfo;
+          let StopTimes = resultFilter[i].StopTimes;
+          replyStr += `
+            ${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo}
+            ${strArr[1]}開車時間:${StopTimes[0].ArrivalTime}，抵達${strArr[2]}時間:${StopTimes[StopTimes.length - 1].ArrivalTime};
+          `;
         }
-      } else {
+      }else {
         replyStr += "沒車睡公園了!";
       }
 
@@ -117,7 +108,7 @@ async function handleMsgReply(event) {
       let rMsgIndex = getRandom(0, recordCache[name].length - 1);
       replyMsg += `${recordCache[name][rMsgIndex]}`;
       recordCache[name].splice(rMsgIndex, 1);
-      console.log(recordCache[name]);
+      // console.log(recordCache[name]);
     } else {
       replyMsg += "今日已無話可說^.^";
     }

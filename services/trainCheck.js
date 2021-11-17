@@ -3,11 +3,14 @@ const jsSHA = require("jssha");
 const moment = require("moment");
 
 const domain = "https://ptx.transportdata.tw/MOTC";
+const PTXconfig = {
+  AppID: "78ca5089aa8846a4ab4d187430b9b2cc",
+  AppKey: "WqZfckeqVOmy2-5M4AYoSDPNJj8",
+};
 
-//appID appKey要等平台回復 2021-11-16申請
 const getAuthorizationHeader = function () {
-  var AppID = "78ca5089aa8846a4ab4d187430b9b2cc";
-  var AppKey = "WqZfckeqVOmy2-5M4AYoSDPNJj8";
+  var AppID = PTXconfig.AppID;
+  var AppKey = PTXconfig.AppKey;
 
   var GMTString = new Date().toGMTString();
   var ShaObj = new jsSHA("SHA-1", "TEXT");
@@ -79,7 +82,6 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
           console.error(err);
         }
         let result = JSON.parse(res.body);
-        console.log(result.TrainTimetables.length);
         let resultFilter = [];
         result.TrainTimetables.forEach((obj, index) => {
           let timeVal = Date.parse(
@@ -87,37 +89,12 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
           ).valueOf();
           let curVal = Date.parse(new Date()).valueOf();
           let isAfter = timeVal > curVal;
-          console.log(timeVal, curVal, isAfter);
+          // console.log(timeVal, curVal, isAfter);
 
           if (isAfter && resultFilter.length < 3) {
             resultFilter.push(obj);
           }
         });
-
-        console.log(resultFilter.length);
-        let strArr = ["", from, to];
-
-        let length = 2;
-        let replyStr = "";
-        if (resultFilter.length > 0) {
-          replyStr += "最近幾班車次:";
-          for (let i = 0; i < length; i++) {
-            let TrainInfo = { ...resultFilter[i].TrainInfo };
-            let StopTimes = [...resultFilter[i].StopTimes];
-            replyStr +=
-              TrainInfo.TrainTypeName.Zh_tw +
-              TrainInfo.TrainNo +
-              " " +
-              strArr[1] +
-              "開車時間:" +
-              StopTimes[0].ArrivalTime +
-              "，抵達" +
-              strArr[2] +
-              ":" +
-              StopTimes[StopTimes.length - 1].ArrivalTime +
-              ";";
-          }
-        }
 
         resolv(resultFilter);
       });
@@ -126,13 +103,6 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
     console.log(err);
   });
 };
-
-//service test
-// let test1 = "桃園";
-// let test2 = "台北";
-// queryFromToStation(test1, test2).then((resulStr) => {
-//   console.log(resulStr);
-// });
 
 module.exports = {
   queryFromToStation,

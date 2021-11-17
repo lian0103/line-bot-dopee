@@ -20,7 +20,7 @@ const swaggerOption = YAML.load("api.yml");
 const swaggerDoc = swaggerJsDoc(swaggerOption);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
-app.use(require("./routes/crawlerRoute"));
+// app.use(require("./routes/crawlerRoute"));
 app.use(require("./routes/loginRoute"));
 app.use(require("./routes/fileUploadRoute"));
 app.use(require("./routes/imgRoute"));

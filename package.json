@@ -36,5 +36,9 @@
   "bugs": {
     "url": "https://github.com/lian0103/line-bot-dopee/issues"
   },
-  "homepage": "https://github.com/lian0103/line-bot-dopee#readme"
+  "homepage": "https://github.com/lian0103/line-bot-dopee#readme",
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x"
+  }
 }

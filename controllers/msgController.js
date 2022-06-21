@@ -111,12 +111,8 @@ async function handleMsgReply(event) {
           let replyStr = '';
           let actItem = resultFilter[i];
           replyStr += `${actItem.ActivityName} 
-          活動時間:${moment(actItem.StartTime).format('YYYY-MM-DD')}~${moment(
-            actItem.EndTime
-          ).format('YYYY-MM-DD')}
-          ${actItem.Description}; ${
-            actItem.WebsiteUrl ? actItem.WebsiteUrl : ''
-          }`;
+活動時間:${moment(actItem.StartTime).format('YYYY-MM-DD')}~${moment(actItem.EndTime).format('YYYY-MM-DD')}
+${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ''}`;
           replyStr += `
 `;
           replyArr.push({

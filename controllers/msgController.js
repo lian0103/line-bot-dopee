@@ -111,7 +111,9 @@ async function handleMsgReply(event) {
           let replyStr = '';
           let actItem = resultFilter[i];
           replyStr += `${actItem.ActivityName} 
-活動時間:${moment(actItem.StartTime).format('YYYY-MM-DD')}~${moment(actItem.EndTime).format('YYYY-MM-DD')}
+活動時間:${moment(actItem.StartTime).format('YYYY-MM-DD')}~${moment(
+            actItem.EndTime
+          ).format('YYYY-MM-DD')}
 ${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ''}`;
           replyStr += `
 `;
@@ -119,16 +121,11 @@ ${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ''}`;
             type: 'text',
             text: replyStr,
           });
-          if (Object.keys(actItem.Picture).length > 0) {
-            Object.keys(actItem.Picture).forEach((i, idx) => {
-              let index = idx + 1;
-              if (actItem.Picture['PictureUrl' + index]) {
-                replyArr.push({
-                  type: 'image',
-                  originalContentUrl: actItem.Picture['PictureUrl' + index],
-                  previewImageUrl: actItem.Picture['PictureUrl' + index],
-                });
-              }
+          if (actItem.Picture.PictureUrl1) {
+            replyArr.push({
+              type: 'image',
+              originalContentUrl: actItem.Picture.PictureUrl1,
+              previewImageUrl: actItem.Picture.PictureUrl1,
             });
           }
         }

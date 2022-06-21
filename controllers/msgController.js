@@ -1,30 +1,30 @@
-const request = require("request");
-const line = require("@line/bot-sdk");
-const linebotModel = require("../models/linebotModel");
-const msgBrocastModel = require("../models/msgBrocastModel");
-const { queryFromToStation } = require("../services/trainCheck");
-const { getActivitiesByDistrict } = require("../services/tourActivity");
-const config = require("../lineConfig");
+const request = require('request');
+const line = require('@line/bot-sdk');
+const linebotModel = require('../models/linebotModel');
+const msgBrocastModel = require('../models/msgBrocastModel');
+const { queryFromToStation } = require('../services/trainCheck');
+const { getActivitiesByDistrict } = require('../services/tourActivity');
+const config = require('../lineConfig');
 const client = new line.Client(config);
-const herokuURL = "https://line-bot-doope.herokuapp.com";
-const moment = require("moment");
+const herokuURL = 'https://line-bot-doope.herokuapp.com';
+const moment = require('moment');
 
 const replyTemplate = [
-  "唉呦~",
-  "我最近開始玩魔力寶貝歸來~~",
-  "我今年一歲",
-  "黃阿瑪有後宮... 我沒有",
-  "你是帥哥 還是美女??",
-  "給我罐罐!!",
-  "我要按摩",
-  "給我小強!",
-  "系統還在優化中...請斗內",
-  "不用上班嗎? 在家耍廢嗎? ",
-  "累~~~",
-  "思考貓生...",
+  '唉呦~',
+  '我最近開始玩魔力寶貝歸來~~',
+  '我今年一歲',
+  '黃阿瑪有後宮... 我沒有',
+  '你是帥哥 還是美女??',
+  '給我罐罐!!',
+  '我要按摩',
+  '給我小強!',
+  '系統還在優化中...請斗內',
+  '不用上班嗎? 在家耍廢嗎? ',
+  '累~~~',
+  '思考貓生...',
 ];
 
-const dirtyWords = ["fuck", "王八", "白癡", "幹"];
+const dirtyWords = ['fuck', '王八', '白癡', '幹'];
 
 var nameCache = [];
 var recordCache = {};
@@ -35,7 +35,7 @@ function getRandom(min, max) {
 
 // event handler
 async function handleMsgReply(event) {
-  let replyMsg = "";
+  let replyMsg = '';
   let replyImg = null;
   console.log(event);
 
@@ -45,20 +45,20 @@ async function handleMsgReply(event) {
       event.message.text.includes(dWord.toLocaleLowerCase())
     ).length > 0
   ) {
-    replyMsg += "請勿說髒話字^^";
+    replyMsg += '請勿說髒話字^^';
 
     return client.replyMessage(event.replyToken, {
-      type: "text",
+      type: 'text',
       text: replyMsg,
     });
   }
 
-  if (event.message.text.includes("火車")) {
-    let strArr = event.message.text.split(" ");
+  if (event.message.text.includes('火車')) {
+    let strArr = event.message.text.split(' ');
     if (strArr[1] && strArr[2]) {
       let resultFilter = await queryFromToStation(strArr[1], strArr[2]);
       let length = 3;
-      let replyStr = "";
+      let replyStr = '';
       if (Array.isArray(resultFilter) && resultFilter.length > 0) {
         replyStr += `最近幾班車次:
 `;
@@ -74,30 +74,30 @@ async function handleMsgReply(event) {
 `;
         }
       } else if (Array.isArray(resultFilter) && resultFilter.length == 0) {
-        replyStr += "沒車睡公園了!";
-      } else if (typeof resultFilter == "string") {
+        replyStr += '沒車睡公園了!';
+      } else if (typeof resultFilter == 'string') {
         replyStr = resultFilter;
       }
 
       return client.replyMessage(event.replyToken, {
-        type: "text",
+        type: 'text',
         text: replyStr,
       });
     } else {
       return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: "查詢火車時刻格式:火車 {起站} {終點站}",
+        type: 'text',
+        text: '查詢火車時刻格式:火車 {起站} {終點站}',
       });
     }
   }
 
-  if (event.message.text.includes("活動")) {
-    let strArr = event.message.text.split(" ");
+  if (event.message.text.includes('活動')) {
+    let strArr = event.message.text.split(' ');
     if (strArr[1]) {
       let resultFilter = await getActivitiesByDistrict(strArr[1]);
-      resultFilter = resultFilter.slice(0,2);
+      resultFilter = resultFilter.slice(0, 2);
       let replyArr = [];
-      let replyStr = "";
+      let replyStr = '';
 
       if (Array.isArray(resultFilter) && resultFilter.length > 0) {
         replyStr += `${strArr[1]}最近活動有:
@@ -108,46 +108,50 @@ async function handleMsgReply(event) {
             return false;
           }
 
-          let replyStr = "";
+          let replyStr = '';
           let actItem = resultFilter[i];
           replyStr += `${actItem.ActivityName} 
-活動時間:${moment(actItem.StartTime).format("YYYY-MM-DD")}~${moment(
+          活動時間:${moment(actItem.StartTime).format('YYYY-MM-DD')}~${moment(
             actItem.EndTime
-          ).format("YYYY-MM-DD")}
-${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""}`;
+          ).format('YYYY-MM-DD')}
+          ${actItem.Description}; ${
+            actItem.WebsiteUrl ? actItem.WebsiteUrl : ''
+          }`;
           replyStr += `
 `;
           replyArr.push({
-            type: "text",
+            type: 'text',
             text: replyStr,
           });
-          if(Object.keys(actItem.Picture).length > 0){
-            Object.keys(actItem.Picture).forEach((i,idx)=>{
+          if (Object.keys(actItem.Picture).length > 0) {
+            Object.keys(actItem.Picture).forEach((i, idx) => {
               let index = idx + 1;
-              replyArr.push({
-                type: "image",
-                originalContentUrl: actItem.Picture['PictureUrl'+index],
-                previewImageUrl: actItem.Picture['PictureUrl'+index],
-              });
-            })
+              if (actItem.Picture['PictureUrl' + index]) {
+                replyArr.push({
+                  type: 'image',
+                  originalContentUrl: actItem.Picture['PictureUrl' + index],
+                  previewImageUrl: actItem.Picture['PictureUrl' + index],
+                });
+              }
+            });
           }
         }
       } else if (Array.isArray(resultFilter) && resultFilter.length == 0) {
-        replyStr = "查無活動 換個縣市~~!";
-      } else if (typeof resultFilter == "string") {
+        replyStr = '查無活動 換個縣市~~!';
+      } else if (typeof resultFilter == 'string') {
         replyStr = resultFilter;
       }
 
       return Array.isArray(replyArr) && resultFilter.length > 0
         ? client.replyMessage(event.replyToken, replyArr)
         : client.replyMessage(event.replyToken, {
-            type: "text",
+            type: 'text',
             text: replyStr,
           });
     } else {
       return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: "查詢縣市活動格式:活動 {縣市名稱}",
+        type: 'text',
+        text: '查詢縣市活動格式:活動 {縣市名稱}',
       });
     }
   }
@@ -158,17 +162,17 @@ ${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""}`;
     nameCache.push(name);
     replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
     replyImg = {
-      type: "image",
-      originalContentUrl: herokuURL + "/images/dopee0 ",
-      previewImageUrl: herokuURL + "/images/dopee0 ",
+      type: 'image',
+      originalContentUrl: herokuURL + '/images/dopee0 ',
+      previewImageUrl: herokuURL + '/images/dopee0 ',
     };
 
     recordCache[name] = [...replyTemplate];
   } else {
-    if (event.message.text && event.message.text.includes("豆皮")) {
+    if (event.message.text && event.message.text.includes('豆皮')) {
       let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {
-        type: "image",
+        type: 'image',
         originalContentUrl: imgURL,
         previewImageUrl: imgURL,
       };
@@ -179,7 +183,7 @@ ${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""}`;
       recordCache[name].splice(rMsgIndex, 1);
       // console.log(recordCache[name]);
     } else {
-      replyMsg += "今日已無話可說^.^";
+      replyMsg += '今日已無話可說^.^';
     }
   }
   if (event.message.text) {
@@ -191,8 +195,8 @@ ${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""}`;
   }
 
   const echo = replyImg
-    ? [{ type: "text", text: replyMsg }, replyImg]
-    : { type: "text", text: replyMsg };
+    ? [{ type: 'text', text: replyMsg }, replyImg]
+    : { type: 'text', text: replyMsg };
 
   return client.replyMessage(event.replyToken, echo);
 }
@@ -227,16 +231,16 @@ module.exports.broadcast = async (req, res) => {
   // console.log(req)
   console.log(msg, img);
 
-  if (msg && msg != "") {
+  if (msg && msg != '') {
     let body = img
       ? {
           messages: [
             {
-              type: "text",
+              type: 'text',
               text: msg,
             },
             {
-              type: "image",
+              type: 'image',
               originalContentUrl: herokuURL + `/upload/${img}`,
               previewImageUrl: herokuURL + `/upload/${img}`,
             },
@@ -245,17 +249,17 @@ module.exports.broadcast = async (req, res) => {
       : {
           messages: [
             {
-              type: "text",
+              type: 'text',
               text: msg,
             },
           ],
         };
 
     let reqOption = {
-      url: "https://api.line.me/v2/bot/message/broadcast",
-      method: "POST",
+      url: 'https://api.line.me/v2/bot/message/broadcast',
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${config.channelAccessToken}`,
       },
       body: JSON.stringify(body),
@@ -264,14 +268,14 @@ module.exports.broadcast = async (req, res) => {
       // console.log(result);
       let doc = new msgBrocastModel({
         msg,
-        img: img ? img : "",
+        img: img ? img : '',
       });
       await doc.save();
 
       res.json(result);
     });
   } else {
-    res.json({ status: 301, msg: "broadcast error!", body: req.body });
+    res.json({ status: 301, msg: 'broadcast error!', body: req.body });
   }
 };
 

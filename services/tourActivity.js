@@ -28,7 +28,6 @@ const queryTourismActivity = () => {
   });
 };
 
-queryTourismActivity();
 
 const getActivitiesByDistrict = (districStr = "新北市") => {
   return new Promise(async (resolv, reject) => {
@@ -47,7 +46,7 @@ const getActivitiesByDistrict = (districStr = "新北市") => {
         // console.log(obj.EndTime, bool);
         return bool;
       });
-    // console.log(result);
+    console.log(result);
 
     resolv(result);
   });

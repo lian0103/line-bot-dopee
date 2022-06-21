@@ -1,5 +1,5 @@
 # nodeJS & line-bot message API
-預計使用nodeJS 和 Express 套件架設基礎的http服務。並串接line-bot message API。
+使用nodeJS 和 Express 套件架設基礎的http服務。並串接line-bot message API。
 實作功能:line官方帳號訊息回覆和紀錄、推播文字和圖片訊息。
 
 demo: https://line-bot-doope.herokuapp.com/     

@@ -27,5 +27,11 @@ API文件工具:swagger
 
 ![](https://i.imgur.com/VOptuwr.jpg)
 
-
 界接資料來源: 交通部公共運輸整合資訊平台
+
+----
+
+2023-03-17
+issues:
+1.Heroku免費運行方案取消。需要尋找替代平台
+-> 再把linebot message webhook重新設定

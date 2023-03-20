@@ -6,7 +6,7 @@ const { queryFromToStation } = require('../services/trainCheck');
 const { getActivitiesByDistrict } = require('../services/tourActivity');
 const config = require('../lineConfig');
 const client = new line.Client(config);
-const herokuURL = 'https://line-bot-doope.herokuapp.com';
+const serviceURL = process.env.GCP_DOMAIN;
 const moment = require('moment');
 
 const replyTemplate = [
@@ -156,14 +156,14 @@ ${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ''}`;
     replyMsg += `Hi! ${name} 我是豆皮! 6個月大時成為太監! ^.^ `;
     replyImg = {
       type: 'image',
-      originalContentUrl: herokuURL + '/images/dopee0 ',
-      previewImageUrl: herokuURL + '/images/dopee0 ',
+      originalContentUrl: serviceURL + '/images/dopee0 ',
+      previewImageUrl: serviceURL + '/images/dopee0 ',
     };
 
     recordCache[name] = [...replyTemplate];
   } else {
     if (event.message.text && event.message.text.includes('豆皮')) {
-      let imgURL = herokuURL + `/images/dopee${getRandom(1, 3)}`;
+      let imgURL = serviceURL + `/images/dopee${getRandom(1, 3)}`;
       replyImg = {
         type: 'image',
         originalContentUrl: imgURL,
@@ -234,8 +234,8 @@ module.exports.broadcast = async (req, res) => {
             },
             {
               type: 'image',
-              originalContentUrl: herokuURL + `/upload/${img}`,
-              previewImageUrl: herokuURL + `/upload/${img}`,
+              originalContentUrl: serviceURL + `/upload/${img}`,
+              previewImageUrl: serviceURL + `/upload/${img}`,
             },
           ],
         }

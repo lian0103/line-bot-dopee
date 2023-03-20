@@ -1,6 +1,11 @@
 const request = require("request");
 const moment = require("moment");
 const { getAuthorizationHeader, domain } = require("./PTX_API_Config");
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const queryAllSationInfo = () => {
   return new Promise((resolv, reject) => {
@@ -68,7 +73,7 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
           let timeVal = Date.parse(
             TrainDate + " " + obj.StopTimes[0].ArrivalTime + ":00"
           ).valueOf();
-          let curVal = Date.parse(new Date()).valueOf();
+          let curVal = Date.parse(dayjs().tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss")).valueOf();
           let isAfter = timeVal > curVal;
           // console.log(timeVal, curVal, isAfter);
 
@@ -88,3 +93,6 @@ const queryFromToStation = (from = "鶯歌", to = "山佳", today = true) => {
 module.exports = {
   queryFromToStation,
 };
+
+// console.log(dayjs().tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss"))
+// console.log(Date.parse(dayjs().tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss")).valueOf())

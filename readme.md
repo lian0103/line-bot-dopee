@@ -35,3 +35,8 @@ API文件工具:swagger
 issues:
 1.Heroku免費運行方案取消。需要尋找替代平台
 -> 再把linebot message webhook重新設定
+
+改使用google cloud run 部署
+
+---
+2023-10-31 整理檔案

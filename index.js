@@ -23,6 +23,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use(require("./routes/loginRoute"));
 app.use(require("./routes/fileUploadRoute"));
 app.use(require("./routes/imgRoute"));
+app.use(require("./routes/wavRoute"));
 app.use(require("./routes/lineBotCallback"));
 app.use([express.json(), require("./routes/msgRoute")]);
 

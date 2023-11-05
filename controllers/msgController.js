@@ -2,20 +2,16 @@ const request = require("request");
 const line = require("@line/bot-sdk");
 const linebotModel = require("../models/linebotModel");
 const msgBrocastModel = require("../models/msgBrocastModel");
-const { queryFromToStation } = require("../services/trainCheck");
-const { getActivitiesByDistrict } = require("../services/tourActivity");
 const config = require("../lineConfig");
 const client = new line.Client(config);
 const serviceURL = process.env.GCP_DOMAIN;
-const moment = require("moment");
 const { v4: uuidv4 } = require("uuid");
 const { textToSpeak } = require("../utils/textToSpeak");
 const { fetchOpenAiChat } = require("../services/openAIChat");
 
 const replyTemplate = [
   "唉呦~",
-  "我最近開始玩魔力寶貝歸來~~",
-  "我今年一歲",
+  "我今年3歲",
   "黃阿瑪有後宮... 我沒有",
   "你是帥哥 還是美女??",
   "給我罐罐!!",
@@ -24,7 +20,8 @@ const replyTemplate = [
   "系統還在優化中...請斗內",
   "不用上班嗎? 在家耍廢嗎? ",
   "累~~~",
-  "思考貓生..."
+  "思考貓生...",
+  "奴才是Jason，Jason是奴才"
 ];
 
 const dirtyWords = ["fuck", "王八", "白癡", "幹"];
@@ -79,98 +76,6 @@ async function handleMsgReply(event) {
       return client.replyMessage(event.replyToken, replyArr);
     } catch (error) {
       console.log("textToSpeak error");
-    }
-  }
-
-  if (event.message.text.includes("火車")) {
-    let strArr = event.message.text.split(" ");
-    if (strArr[1] && strArr[2]) {
-      let resultFilter = await queryFromToStation(strArr[1], strArr[2]);
-      let length = 3;
-      let replyStr = "";
-      if (Array.isArray(resultFilter) && resultFilter.length > 0) {
-        replyStr += `最近幾班車次:
-`;
-        for (let i = 0; i < length; i++) {
-          let TrainInfo = resultFilter[i].TrainInfo;
-          let StopTimes = resultFilter[i].StopTimes;
-          replyStr += `${TrainInfo.TrainTypeName.Zh_tw} ${TrainInfo.TrainNo} ${strArr[1]}開車時間:${
-            StopTimes[0].ArrivalTime
-          }，抵達${strArr[2]}時間:${StopTimes[StopTimes.length - 1].ArrivalTime};`;
-          replyStr += `
-`;
-        }
-      } else if (Array.isArray(resultFilter) && resultFilter.length == 0) {
-        replyStr += "沒車睡公園了!";
-      } else if (typeof resultFilter == "string") {
-        replyStr = resultFilter;
-      }
-
-      return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: replyStr
-      });
-    } else {
-      return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: "查詢火車時刻格式:火車 {起站} {終點站}"
-      });
-    }
-  }
-
-  if (event.message.text.includes("活動")) {
-    let strArr = event.message.text.split(" ");
-    if (strArr[1]) {
-      let resultFilter = await getActivitiesByDistrict(strArr[1]);
-      resultFilter = resultFilter.slice(0, 2);
-      let replyArr = [];
-      let replyStr = "";
-
-      if (Array.isArray(resultFilter) && resultFilter.length > 0) {
-        replyStr += `${strArr[1]}最近活動有:
-`;
-        for (let i = 0; i < resultFilter.length; i++) {
-          if (!resultFilter[i]) {
-            console.log(resultFilter);
-            return false;
-          }
-
-          let replyStr = "";
-          let actItem = resultFilter[i];
-          replyStr += `${actItem.ActivityName} 
-活動時間:${moment(actItem.StartTime).format("YYYY-MM-DD")}~${moment(actItem.EndTime).format("YYYY-MM-DD")}
-${actItem.Description}; ${actItem.WebsiteUrl ? actItem.WebsiteUrl : ""}`;
-          replyStr += `
-`;
-          replyArr.push({
-            type: "text",
-            text: replyStr
-          });
-          if (actItem.Picture.PictureUrl1) {
-            replyArr.push({
-              type: "image",
-              originalContentUrl: actItem.Picture.PictureUrl1,
-              previewImageUrl: actItem.Picture.PictureUrl1
-            });
-          }
-        }
-      } else if (Array.isArray(resultFilter) && resultFilter.length == 0) {
-        replyStr = "查無活動 換個縣市~~!";
-      } else if (typeof resultFilter == "string") {
-        replyStr = resultFilter;
-      }
-
-      return Array.isArray(replyArr) && resultFilter.length > 0
-        ? client.replyMessage(event.replyToken, replyArr)
-        : client.replyMessage(event.replyToken, {
-            type: "text",
-            text: replyStr
-          });
-    } else {
-      return client.replyMessage(event.replyToken, {
-        type: "text",
-        text: "查詢縣市活動格式:活動 {縣市名稱}"
-      });
     }
   }
 

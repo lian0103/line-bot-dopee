@@ -46,4 +46,4 @@ issues:
 新增 chatGPT 串接
 翻譯後，輸出 wav 音訊檔案
 
-![](https://imgur.com/yudlDs2)
+![](https://i.imgur.com/yudlDs2.png)

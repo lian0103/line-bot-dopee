@@ -55,7 +55,7 @@ async function handleMsgReply(event) {
   }
 
   if (keyWord.includes("生成圖")) {
-    let { url } = await fetchOpenAiImage(commandMsg);
+    let { url } = await fetchOpenAiImage(event.message.text);
 
     return client.replyMessage(event.replyToken, [
       {

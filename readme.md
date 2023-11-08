@@ -7,18 +7,18 @@ demo: https://line-bot-dopee-zhy7lseifa-an.a.run.app/
 
 API docs: https://line-bot-dopee-zhy7lseifa-an.a.run.app/api-docs/
 
-使用語言: javascript  
-套件模組:nodeJS、express  
-第三方服務: line-developer API 、 MongoDB  
-部署工具:Heroku  
+使用語言: javascript
+套件模組:nodeJS、express
+第三方服務: line-developer API 、 MongoDB
+部署工具:Heroku
 API 文件工具:swagger
 
 開發流程可參考 note.md
 
 ---
 
-2021-11-18  
-更新功能: 1.查詢火車起迄站時刻  
+2021-11-18
+更新功能: 1.查詢火車起迄站時刻
 說明:使用者可透過輸入「火車 ${起站} ${終點站}」得知台鐵近幾班車次
 
 ![](https://i.imgur.com/TC4OTQD.jpg)
@@ -46,4 +46,10 @@ issues:
 新增 chatGPT 串接
 翻譯後，輸出 wav 音訊檔案
 
-![](https://i.imgur.com/yudlDs2.png)
+使用 ngrok 將本地 3005 對應一個 ngrok 公網 https ip
+
+```
+./ngrok http 3005
+```
+
+▲ 需要下載 ngrok 程式

@@ -8,6 +8,7 @@ const serviceURL = process.env.GCP_DOMAIN;
 const { v4: uuidv4 } = require("uuid");
 const { textToSpeak } = require("../utils/textToSpeak");
 const { fetchOpenAiChat } = require("../services/openAIChat");
+const { fetchOpenAiImage } = require("../services/openAIImage");
 
 const replyTemplate = [
   "唉呦~",
@@ -38,7 +39,7 @@ async function handleMsgReply(event) {
   let replyMsg = "";
   let replyImg = null;
   let keyWord = event.message.text.split(" ")[0] || "";
-  let quation = event.message.text.split(" ")[1] || "";
+  let commandMsg = event.message.text.split(" ")[1] || "";
   console.log(event);
 
   if (
@@ -53,8 +54,20 @@ async function handleMsgReply(event) {
     });
   }
 
-  if (keyWord.includes("翻譯") && quation) {
-    // console.log(keyWord, quation);
+  if (keyWord.includes("生成圖")) {
+    let { url } = await fetchOpenAiImage(commandMsg);
+
+    return client.replyMessage(event.replyToken, [
+      {
+        type: "image",
+        originalContentUrl: url,
+        previewImageUrl: url
+      }
+    ]);
+  }
+
+  if (keyWord.includes("翻譯") && commandMsg) {
+    // console.log(keyWord, commandMsg);
     let lang = keyWord.includes("日文") ? "ja" : "en";
     let { content } = await fetchOpenAiChat(event.message.text);
     let fileName = `wav-${uuidv4()}`;

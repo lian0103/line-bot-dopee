@@ -82,7 +82,7 @@ async function handleMsgReply(event) {
         {
           type: "audio",
           originalContentUrl: serviceURL + `/wavs/${fileName}.wav`,
-          duration: 5000 //temp
+          duration: content.length * 500 //temp
         }
       ];
 
